@@ -16,7 +16,7 @@ Nov 25, 2026 · Milestone 1 (Plan). For review before any app code is written. I
 3. **Second client copy (Milestone 4).** Install guide, backups, updates, branding, license key. Test: two copies share nothing.
 4. **Field use (Milestone 5).** The February South Carolina hospital reports go out from v2. v1 stays available as the fallback.
 
-**Decisions.** Michael approved the plan on Nov 25 with the answers recorded in `docs/decisions.md` and the spec's Decisions log. Four are provisional: 2 (to confirm with Cecil's IT contact before Milestone 4), 5 and 8 (to confirm with Cecil) and 11 (to a lawyer later). One question is still open: **whose Claude account drafting uses** (12.20). It's needed before step 2.8.
+**Decisions.** Michael approved the plan on Nov 25 with the answers recorded in `docs/decisions.md` and the spec's Decisions log. Four are provisional: 2 (to confirm with Cecil's IT contact before Milestone 4), 5 and 8 (to confirm with Cecil) and 11 (to a lawyer later). 12.20 (whose Claude account drafting uses) was answered the same day: the recommendation was accepted.
 
 ---
 
@@ -388,7 +388,7 @@ Three layers, so that a mistake in one is caught by another:
 
 **Model and cost.** Claude Opus 5.5 (`claude-opus-5-5`), as v1 uses, set per copy by `DRAFT_MODEL`. A 1 to 2 hour walk-through plus three earlier reports as examples makes a prompt of about 50,000 to 120,000 tokens. That comes to roughly $0.50 to $1.50 per draft at today's prices ($4 per million input tokens, $20 per million output). A re-draft costs about the same, and the spelling check costs cents. Prompt caching keeps re-drafts cheaper.
 
-**Whose Claude account, per copy** (decision 12.20, still open):
+**Whose Claude account, per copy** (decision 12.20, accepted Nov 25):
 
 | Copy | Account | Set by |
 | --- | --- | --- |
@@ -553,7 +553,7 @@ Each step below is one PR (decision 12.14, now in `CLAUDE.md`). Each step lists 
 
 ## 12. Decisions
 
-Answered Nov 25: recommendations accepted for 1, 3, 4, 6, 7, 9, 10, 13, 14, 15, 16, 18 and 19. Provisional: 2, 5, 8 and 11. Changed: 12 and 17. **Still open: 20.** The outcomes and reasons are in `docs/decisions.md`. Items marked **(Open question)** are from the spec's Open questions list.
+Answered Nov 25: recommendations accepted for 1, 3, 4, 6, 7, 9, 10, 13, 14, 15, 16, 18 and 19. Provisional: 2, 5, 8 and 11. Changed: 12 and 17. 20 was accepted the same day. The outcomes and reasons are in `docs/decisions.md`. Items marked **(Open question)** are from the spec's Open questions list.
 
 1. **Hosting (Open question).** Recommend Option C: one multi-organization package. Cecil's copy runs on a small cloud server we manage, and clients either get an organization in it or the same package on their own server. Please ask Cecil's IT contact:
    - Do owners like MPT require their own server, or would a separate, walled-off organization on Cecil's copy do?
