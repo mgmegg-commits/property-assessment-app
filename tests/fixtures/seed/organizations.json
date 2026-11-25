@@ -1,0 +1,18 @@
+[
+  {
+    "id": "8b0c6f4e-3f51-4c6e-9a3e-2d1f0c9b7a01",
+    "name": "Cecil Ingram Properties LLC",
+    "type": "assessor_firm"
+  },
+  {
+    "id": "8b0c6f4e-3f51-4c6e-9a3e-2d1f0c9b7a02",
+    "name": "Example Owner LLC",
+    "type": "client"
+  },
+  {
+    "id": "8b0c6f4e-3f51-4c6e-9a3e-2d1f0c9b7a03",
+    "name": "Example Operator",
+    "type": "facility_operator",
+    "clientOrgId": "8b0c6f4e-3f51-4c6e-9a3e-2d1f0c9b7a02"
+  }
+]

@@ -1,0 +1,22 @@
+{
+  "name": "@crb/server",
+  "version": "2.0.0-dev",
+  "description": "The API, sign-in, permissions, storage, jobs and drafting.",
+  "private": true,
+  "type": "module",
+  "main": "dist/main.js",
+  "scripts": {
+    "build": "tsc -b",
+    "start": "node dist/main.js"
+  },
+  "dependencies": {
+    "@crb/core": "2.0.0-dev",
+    "@fastify/static": "^10.1.12",
+    "fastify": "^5.12.8",
+    "pg": "^8.23.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@types/pg": "^8.23.1"
+  }
+}
