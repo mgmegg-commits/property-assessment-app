@@ -129,11 +129,11 @@ The working assumption is one copy of the app per client, on the client's own se
 
 | Area | Requirement |
 | --- | --- |
-| Hosting | Packaged so one copy installs on a client's server; Cecil runs his own copy for his firm |
+| Hosting | Packaged so one copy installs on a client's server; Cecil runs his own copy for his firm. The same package runs on a Mac, Cecil's computer, a managed host or a small cloud server |
 | Data separation | Each organization sees only its own data; tenants see only their facility's items |
 | Security | Encrypted in transit and at rest; no public links by default; the AI provider must not train on client data |
 | Retention | Reports and photos kept forever; audio deleted once drafted; transcripts kept as drafting examples |
-| Compatibility | Every older report opens and prints; v1 reports can be imported from v1's backup export |
+| Compatibility | Every older report opens and prints. There's no v1 import (Cecil has no real reports in v1); a plain JSON import loads test data |
 | Devices | iPhone and iPad first; desktop for review and editing |
 | Ease of use | Fewest possible clicks; Cecil and tenant staff need no training |
 | Licensing | A yearly license key; reports stay readable after it lapses |
@@ -144,9 +144,9 @@ Each milestone ends with a test against real material before the next one starts
 
 1. **Plan.** Claude Code proposes the architecture, data model and milestone breakdown; nothing is coded until it's reviewed.
    - Test: the plan answers every open question below or names the decision it needs.
-2. **Assessor workflow on the new foundation.** Everything in A-1 to A-17, with server storage and Cecil's account.
+2. **Assessor workflow on the new foundation.** Everything in A-1 to A-16, plus F-1 (issuing creates the action items), with server storage and Cecil's account.
    - Test: rebuild the Midlands report from its photos, and draft a real walk-through from the local test building.
-3. **Follow-up.** F-1 to F-9: tracker, assignment, tenant updates, overdue flags, exports, verification.
+3. **Follow-up.** F-2 to F-9 and A-17: tracker, assignment, tenant updates, overdue flags, exports, and verification at the next visit.
    - Test: run one full cycle with three test users (client, facility, tech) on phones.
 4. **Second client.** Install a separate copy with its own branding, users and templates.
    - Test: nothing is shared between the two copies.
@@ -159,6 +159,21 @@ Add a row after every meeting with Cecil; this table is the source of truth for 
 
 | Date | Decision |
 | --- | --- |
+| Nov 25, 2026 | Plan approved (`docs/plan.md`); details and reasons in `docs/decisions.md` |
+| Nov 25, 2026 | Hosting: build once, install anywhere. One package keeps each organization's data separate; a client gets its own organization in Cecil's copy or the same package on its own server. Hosting details to confirm with Cecil's IT contact before Milestone 4 |
+| Nov 25, 2026 | No staging server for now; the package runs on Michael's Mac with one command and fixture data. Hosting for Cecil's real copy is chosen before he uses v2 for real |
+| Nov 25, 2026 | Provisional: in a client's own copy, Cecil works inside that copy as an assessor user. Confirm with Cecil's IT contact before Milestone 4 |
+| Nov 25, 2026 | Tenants sign in with personal secure links (one per named person, no password, their facility's items only); no shared links. Cecil and client staff sign in with an email link, then Face ID |
+| Nov 25, 2026 | Provisional: action item statuses are Open, Assigned, In progress, Done, Deferred. Facility or client marks Done; only the client marks Deferred or changes due dates; only the assessor records Fixed, Not fixed or Worse at the next visit. Confirm with Cecil |
+| Nov 25, 2026 | Issued means the report is frozen (stored with its PDF) and its action items stay live; a revision is a new frozen copy and its items carry over by finding |
+| Nov 25, 2026 | Drafting examples come only from the same client's reports |
+| Nov 25, 2026 | Provisional: a section's rating stays the average of its subsections, overridable. Confirm with Cecil |
+| Nov 25, 2026 | No third priority scheme for now |
+| Nov 25, 2026 | Overdue items flagged on screen only; an opt-in weekly email digest comes later |
+| Nov 25, 2026 | Provisional: Cecil's questionnaires, templates and phrases belong to his firm, installed into client copies as a licensed pack. Terms go to a lawyer |
+| Nov 25, 2026 | No v1 import: Cecil has no real reports in v1. A plain JSON import is kept for test data |
+| Nov 25, 2026 | Milestones: F-1 moves into Milestone 2 and A-17 into Milestone 3 |
+| Nov 25, 2026 | Original photos always kept; offline next-visit checklist on the iPad; program coordinator view deferred until after Milestone 3; site videos out of scope for the first release |
 | Nov 25, 2026 | Build v2 fresh with v1's best parts plus live follow-up; v1 stays the working version |
 | Nov 24, 2026 | The assessor identifies; the client or tenant assigns and dates. Assignee and due date print as TBD |
 | Nov 24, 2026 | Tenants update action items through a link on the client's secured server; the assessment stays frozen and a separate tracker carries follow-up |
@@ -175,13 +190,15 @@ Add a row after every meeting with Cecil; this table is the source of truth for 
 
 ## Open questions
 
-- [ ] One copy per client on their own server, or one shared site? Ask Cecil's IT contact.
-- [ ] How do tenants get in: their own logins, or secure links with no password?
-- [ ] What are the action item statuses, and who can mark an item done?
-- [ ] What does "issued" mean now: a locked report with live items (proposed), or something else?
-- [ ] Email reminders for overdue items, or on-screen flags only?
-- [ ] Whose Claude account does drafting use in each client's copy?
-- [ ] Should a section's rating stay the average of its subsections, or take the worst one?
-- [ ] Add Immediate / Short-term / Long-term as a third priority scheme?
-- [ ] Who owns Cecil's questionnaires and phrases if the app is sold to others, and on what terms?
-- [ ] What does the program coordinator need? Ask at the meeting next week.
+- [x] One copy per client on their own server, or one shared site? Decided Nov 25: build once, install anywhere. Confirm hosting details with Cecil's IT contact before Milestone 4.
+- [ ] In a client's own copy, does Cecil work inside it as an assessor user? Provisional yes; confirm with Cecil's IT contact before Milestone 4.
+- [ ] Where does Cecil's real copy run (Cecil's computer, a managed host or a small cloud server)? Choose before he uses v2 for real.
+- [x] How do tenants get in: their own logins, or secure links with no password? Decided Nov 25: personal secure links, no password.
+- [ ] What are the action item statuses, and who can mark an item done? Provisional: Open, Assigned, In progress, Done, Deferred (see Decisions log). Confirm with Cecil.
+- [x] What does "issued" mean now: a locked report with live items (proposed), or something else? Decided Nov 25: as proposed.
+- [x] Email reminders for overdue items, or on-screen flags only? Decided Nov 25: on-screen flags; an opt-in weekly digest later.
+- [ ] Whose Claude account does drafting use in each client's copy? Recommended: Cecil's own account for his copy; the client's own account (Anthropic, or their Bedrock, Vertex or Foundry) for theirs (plan 12.20). Needed before step 2.8.
+- [ ] Should a section's rating stay the average of its subsections, or take the worst one? Provisional: the average. Confirm with Cecil.
+- [x] Add Immediate / Short-term / Long-term as a third priority scheme? Decided Nov 25: not for now.
+- [ ] Who owns Cecil's questionnaires and phrases if the app is sold to others, and on what terms? Provisional: they belong to Cecil's firm, as a licensed pack. Terms go to a lawyer.
+- [ ] What does the program coordinator need? Ask at the meeting next week. Deferred until after Milestone 3.

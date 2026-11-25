@@ -20,12 +20,12 @@ v1 is `mgmegg-commits/cecil-report-app` (main, Nov 25, 2026). It works and Cecil
 - The phrase library seed list and the Excel follow-up tracker columns
 
 ## Rules
-- **Old data always opens.** Every stored shape has a version; changes come with a migration and a migration test. v1 reports must import from v1's backup export.
+- **Old data always opens.** Every stored shape has a version; changes come with a migration and a migration test. There's no v1 import (Cecil has no real reports in v1); a plain JSON import loads test data, so v1's document migrations still matter.
 - **The assessment freezes when issued.** Action items keep changing after that; they never change the issued report.
 - **Never delete photo files.** Deleting hides a photo; older versions still show it. Reports and photos are kept forever. Audio is deleted once drafted; transcripts are kept.
 - **Each organization sees only its own data.** Tenants see only their facility's items. Test this for every new endpoint.
 - **No client data in the repo.** Use the fixtures in `tests/fixtures`. Secrets come from environment variables.
-- **Tests for every change.** Keep the full suite passing. Commit after each numbered item in a prompt, and open a PR per milestone.
+- **Tests for every change.** Keep the full suite passing. Commit after each numbered item in a prompt, and open one PR per step of a milestone (the steps are in `docs/plan.md` section 10).
 - **Fewest clicks.** Prefer visible one-tap buttons to menus and dropdowns. Every screen must work at iPhone width.
 - **Update `docs/decisions.md`** when you make a design choice the spec doesn't cover, and list it in your summary.
 
