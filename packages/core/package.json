@@ -1,0 +1,17 @@
+{
+  "name": "@crb/core",
+  "version": "2.0.0-dev",
+  "description": "The assessment model shared by the server and the web app: no database, no web page.",
+  "private": true,
+  "type": "module",
+  "exports": {
+    ".": {
+      "source": "./src/index.ts",
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "scripts": {
+    "build": "tsc -b"
+  }
+}

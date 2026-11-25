@@ -1,0 +1,17 @@
+{
+  "extends": "./tsconfig.base.json",
+  "compilerOptions": {
+    "lib": ["ES2023", "DOM"],
+    "noEmit": true,
+    "declaration": false,
+    "types": ["node"],
+    "customConditions": ["source"]
+  },
+  "include": [
+    "packages/*/test/**/*.ts",
+    "apps/server/test/**/*.ts",
+    "tests/**/*.ts",
+    "vitest.config.ts",
+    "playwright.config.ts"
+  ]
+}
