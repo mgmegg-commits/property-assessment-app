@@ -1,0 +1,16 @@
+**/node_modules
+**/dist
+**/*.tsbuildinfo
+.git
+.github
+.env
+.env.*
+docs
+tests
+scripts
+deploy
+data
+uploads
+playwright-report
+test-results
+*.md
