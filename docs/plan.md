@@ -11,17 +11,12 @@ Nov 25, 2026 · Milestone 1 (Plan). For review before any app code is written. I
 **How it's built.** It's one program that keeps each organization's data separate (Cecil's firm, each client, each facility). It ships as one installable package (Docker). That same package can run as Cecil's own copy on a small cloud server, or on a client's own server for clients who want that. A client who doesn't need their own server can have its own walled-off organization in Cecil's copy instead. So the "one copy per client" assumption stays possible without being something we have to bet on now. Drafting calls Claude from the server. In a client's copy it uses that client's own Claude account (or their Amazon, Google or Microsoft cloud account). Claude doesn't train on that data.
 
 **Order of work.**
-1. **Assessor workflow (Milestone 2).** Everything Cecil does in v1, rebuilt on a real database with accounts, plus importing his v1 reports. Test: rebuild the Midlands report and draft a real walk-through.
+1. **Assessor workflow (Milestone 2).** Everything Cecil does in v1, rebuilt on a real database with accounts. Test: rebuild the Midlands report and draft a real walk-through.
 2. **Follow-up (Milestone 3).** Tracker, assignment, phone updates, overdue flags, exports, and the check at the next visit. Test: one full cycle with three people on phones.
 3. **Second client copy (Milestone 4).** Install guide, backups, updates, branding, license key. Test: two copies share nothing.
 4. **Field use (Milestone 5).** The February South Carolina hospital reports go out from v2. v1 stays available as the fallback.
 
-**Decisions I need from you** (full list with my recommendations in section 12). The ones that block Milestone 2 are:
-- **Hosting:** agree to the "build once, install anywhere" approach and ask Cecil's IT contact the questions in 12.1.
-- **Cecil's v1 data:** tell me where it lives today (the v1 website, the claude.ai page, or both). Also approve a small change to v1 so it can export photos as well as reports. v1's backup file has no photos in it.
-- **Claude account:** confirm whose account drafting uses in each copy.
-- **How tenants get in:** a personal sign-in link per person, with no password (recommended), or full logins.
-- **Action item statuses** and who can mark an item done.
+**Decisions.** Michael approved the plan on Nov 25 with the answers recorded in `docs/decisions.md` and the spec's Decisions log. Four are provisional: 2 (to confirm with Cecil's IT contact before Milestone 4), 5 and 8 (to confirm with Cecil) and 11 (to a lawyer later). One question is still open: **whose Claude account drafting uses** (12.20). It's needed before step 2.8.
 
 ---
 
@@ -70,7 +65,9 @@ The same multi-organization package as B, shipped the way A needs. Cecil's copy 
 | **Good** | Nothing is decided too early. If Cecil's IT contact says owners don't actually need their own servers, we just stop offering it. Milestone 4's test ("nothing shared between two copies") still applies. |
 | **Hard** | Data separation has to be right in both modes: between organizations inside a copy, and between copies. That's two kinds of testing, both planned below. |
 
-**Recommendation: Option C.** It costs almost nothing extra over A, because the app needs organizations and roles anyway, and it keeps B available. Confirm with Cecil's IT contact before Milestone 4. The plan only depends on that answer from Milestone 4 on.
+**Recommendation: Option C** (approved Nov 25). It costs almost nothing extra over A, because the app needs organizations and roles anyway, and it keeps B available. Confirm with Cecil's IT contact before Milestone 4. The plan only depends on that answer from Milestone 4 on.
+
+**Where Cecil's copy runs is not chosen yet** (12.17). Until he uses v2 for real there's no staging server: the package runs on Michael's Mac with Docker Desktop. It stays portable between a Mac, Cecil's computer, a managed host and a small cloud server, so the same Compose file and images work everywhere, with nothing tied to one provider.
 
 ### Shape of one copy
 
@@ -249,7 +246,7 @@ The document (`doc`) keeps v1's shape. It holds the details (date, time, prepare
 | `id` | Stable. It becomes the action item's `finding_id`, which is how items follow a finding across revisions. |
 | `description`, `location` | One issue = one finding (A-6). `location` lists every place it was seen. |
 | `observationOnly` | No action item |
-| `action` | `{ title, recommendation, priority }`. v1's `assignee` and `due` move to the action item, because the assessor never sets them (A-12). v1 values are carried into the imported item. |
+| `action` | `{ title, recommendation, priority }`. v1's `assignee` and `due` move to the action item, because the assessor never sets them (A-12). v1-shaped test data carries them into the imported item. |
 | `drafted`, `sources` | Drafted marks, and the transcript remarks it came from |
 
 **Photo**: a table row for permissions and for keeping things forever, plus its arrangement inside the document.
@@ -339,7 +336,7 @@ There are two kinds, with the same rule: old data always opens.
 1. **Database migrations.** These are numbered SQL files in `apps/server/migrations`, applied in order when the app starts, each in a transaction. They only go forward. `update.sh` backs up first. The app refuses to start against a database newer than itself, so an older image can't damage newer data. CI tests every migration by building a database at each earlier release's schema, filling it from fixtures, migrating it and checking the result.
 2. **Document migrations.** Every stored JSON shape (assessment document, version snapshot, issue record, transcript, template, settings) carries a `schema` number. `packages/core/migrations` has one function per step: v1's steps 1 to 6 ported unchanged, and 7 for v2's changes. Documents are upgraded when read. Draft documents are saved in the new shape on their next save. Issue records and versions are never rewritten. Every step has a fixture document in `tests/fixtures/docs/` and a test that upgrades it, validates it against the Zod schema, and builds its PDF without errors.
 
-Schema 7, the first v2 step, moves `assignee` and `due` off findings (their values go to the action item at import). It also adds `leftOut` to transcript segments, and adds `org`, `property` and `template_id` links on the row rather than in the document.
+Schema 7, the first v2 step, moves `assignee` and `due` off findings (in v1-shaped test data, their values go to the action item on import). It also adds `leftOut` to transcript segments, and adds `org`, `property` and `template_id` links on the row rather than in the document.
 
 ---
 
@@ -391,7 +388,7 @@ Three layers, so that a mistake in one is caught by another:
 
 **Model and cost.** Claude Opus 5.5 (`claude-opus-5-5`), as v1 uses, set per copy by `DRAFT_MODEL`. A 1 to 2 hour walk-through plus three earlier reports as examples makes a prompt of about 50,000 to 120,000 tokens. That comes to roughly $0.50 to $1.50 per draft at today's prices ($4 per million input tokens, $20 per million output). A re-draft costs about the same, and the spelling check costs cents. Prompt caching keeps re-drafts cheaper.
 
-**Whose Claude account, per copy** (decision 12.6):
+**Whose Claude account, per copy** (decision 12.20, still open):
 
 | Copy | Account | Set by |
 | --- | --- | --- |
@@ -474,34 +471,23 @@ All screens are designed and tested at iPhone width (390 px) first, then iPad an
 
 The claude.ai artifact backend, IndexedDB as storage, the single password, and the Hide flag beyond what migrations need (older reports still honor it).
 
-### Importing v1 reports
+### Importing v1 reports: not needed
 
-**The gap.** v1's backup export (`downloadBackup`) contains settings and report documents but **no photo files, transcripts, versions or drafting examples**. Importing from the backup alone would bring reports in without their photos. That conflicts with "every older report opens and prints". There are two ways to close the gap (decision 12.12):
-1. **Recommended: a small v1 change**, an "Export everything (.zip)" button. It makes a zip with the backup JSON plus every photo file, transcript, version and drafting example, and works from both the v1 website and the claude.ai page. This is a short PR on v1 and doesn't change any approved screen.
-2. If Cecil only used the v1 website: the importer can read v1's `DATA_DIR` folder directly (`npm run import:v1 -- --data-dir …`).
+Cecil has no real reports in v1, so there's no v1 import and no change to v1 (decision 12.12). v1's backup export also holds no photo files, so it couldn't have carried photos over in any case.
 
-**The importer** (Milestone 2, step 2.10) accepts the zip, the folder, or the plain backup JSON (imported with photo placeholders and a clear warning):
-1. Upgrades each report with v1's own `migrateAssessment()` to schema 6, then v2's step 7.
-2. Matches each report to a property by name and address, creating the property if needed. If two v1 reports look like the same property with different details, it asks.
-3. Stores photo files (with deduplication by SHA-256), then the report, its versions, transcript and drafting example.
-4. Imports issued reports as issued. Their stored PDF is generated from the imported document, and a revision history is kept. Their action items are created with status `open` and an `import` update entry. Any v1 assignee or due date becomes the item's starting value.
-5. Imports v1 settings as Cecil's firm's branding, disclaimer, phrase library and standard section lists.
-6. Can be run again safely: it matches by v1 id and skips what's already there.
-7. Writes a report: "42 reports, 8,311 photos, 3 warnings".
-
-It is tested with v1's fixture `tests/fixtures/v1-assessment.json` (schema 1) plus a fixture at schema 6 built from v1's test data. The test imports both, opens them, and builds their PDFs.
+What stays is a **plain JSON import for test data** (step 2.10). It takes a v1 backup file or a fixture document, upgrades it through v1's document migrations 1 to 6 and v2's step 7, creates a test property, and opens it. It also loads the fixture data that the one-command start uses. It is tested with v1's `tests/fixtures/v1-assessment.json` (schema 1) and a schema 6 fixture built from v1's test data: the test imports both, opens them and builds their PDFs.
 
 ---
 
 ## 10. Milestones
 
-Each step below is sized as one PR (decision 12.14). `CLAUDE.md` says one PR per milestone. I suggest one PR per step for Milestones 2 and 3, because Milestone 2 alone would otherwise be a very large review. Each step lists its tests and how you can check it yourself. "Staging" means a test copy at a private web address that I update with each step, filled with fixture data, never client data.
+Each step below is one PR (decision 12.14, now in `CLAUDE.md`). Each step lists its tests and how you can check it yourself. There's no staging server (12.17). You check each step on your Mac with the one-command start from step 2.1, which loads fixture data, never client data. I run the same checks in my own sessions, including Safari's engine at iPhone and iPad sizes.
 
 ### Milestone 2: Assessor workflow on the new foundation (A-1 to A-16)
 
 | Step | What | Tested by | How you check it |
 | --- | --- | --- | --- |
-| 2.1 | Repo skeleton: workspaces, TypeScript, lint, Vitest, Playwright (Chromium and WebKit), CI, Docker Compose for development with Postgres, staging copy, v1 fixtures copied to `tests/fixtures` | CI green on the PR; a smoke test opens the page at phone, iPad and desktop sizes | Open the staging address on iPad and desktop: a "Cecil's Report Builder" start page |
+| 2.1 | Repo skeleton: workspaces, TypeScript, lint, Vitest, Playwright (Chromium and WebKit), CI, and a Docker Compose stack with Postgres. One start command works on a Mac with Docker Desktop and loads fixture data. It also serves the app on your home network over HTTPS (with a local certificate) so an iPhone or iPad can open it. v1 fixtures copied to `tests/fixtures` | CI green on the PR; a test that the stack starts from a clean checkout and answers; a smoke test opens the page at phone, iPad and desktop sizes | On your Mac, run the start command from the README, then open the address it prints on the Mac and on your iPad (same Wi-Fi): a "Cecil's Report Builder" start page with the fixture data |
 | 2.2 | `packages/core`: v1 model, templates, sections, priorities, phrases, checks, versions and document migrations 1 to 7, ported with their v1 tests | Every v1 unit test passes in its new home; a migration fixture test for each schema 1 to 7 | Nothing to see yet. Read the PR summary listing each v1 test carried over. |
 | 2.3 | Database, organizations, users, roles, sign-in (email link, Face ID passkey), sessions, row-level security, the access-test harness | Sign-in tests; the cross-organization access test; RLS tests that query without a filter and get nothing | On iPhone: enter your email, tap the link, accept Face ID. Sign in on desktop with the same email. Sign out. |
 | 2.4 | Files and photos: storage (disk and S3), resumable deduplicated upload, thumbnails, HEIC, originals kept, delete hides | Upload, retry and dedup tests with fixture photos; "no delete" tests; HEIC fixture | On iPad, add 20 photos from the camera roll, turn on airplane mode halfway, then turn it off: all 20 arrive once |
@@ -510,8 +496,8 @@ Each step below is sized as one PR (decision 12.14). `CLAUDE.md` says one PR per
 | 2.7 | Photos: All Photos tray on every editing screen, viewer with Put in…, In report / Appendix only / Exclude, delete, one photo in two places, rotate, markup with text and numbered areas (A-7 to A-10) | Ported photo, markup and rotate tests; drag-and-drop tests in WebKit at iPad size | On iPad: drag from the tray, use Put in…, mark up a roof photo with two numbered areas, rotate it |
 | 2.8 | Walk-through: upload the memo and photos, check timing, Leave out (A-16), drafting job on the server, accept drafted values, re-draft, drafting examples per client (A-1); provider switch | Ported drafting tests with the fake Claude; a prompt test that left-out remarks and other clients' examples never appear; a job restart test | Upload a real voice memo and its photos. Mark one remark Leave out. Draft, accept, re-draft: what you accepted stays. |
 | 2.9 | Versions (A-14); review and spelling (A-15); issue: frozen issue record, stored PDF, action items created (F-1, moved from Milestone 3 because A-17 needs it); start a revision; CSV and Excel exports | Version and restore tests; "an issued report can't be changed" API tests; PDF compared with v1's for the same fixture; tracker columns test | Save a version, restore it, issue, download the PDF and Excel. Try to edit the issued report: you can't. |
-| 2.10 | v1 import (section 9), and the "Export everything" PR on v1 if you approve it | Import tests from the v1 fixtures; re-import is a no-op | Export from v1, import into staging: reports open with photos, PDFs match v1's |
-| 2.11 | Milestone test: rebuild the Midlands report from its photos, and draft a walk-through of the local test building, on Cecil's copy (real material stays there, never in the repo) | The full suite; a timed run of both | Cecil does both on his iPad and desktop. We note every extra click he notices and fix those before Milestone 3. |
+| 2.10 | Plain JSON import for test data (section 9) | Import tests from the v1 fixtures (schema 1 and 6); re-import is a no-op | Import v1's fixture file on your Mac: it opens, and its PDF builds |
+| 2.11 | Milestone test: rebuild the Midlands report from its photos, and draft a walk-through of the local test building, on a copy running on your Mac or Cecil's computer (real material stays on that machine, never in the repo) | The full suite; a timed run of both | Cecil does both on his iPad and desktop. We note every extra click he notices and fix those before Milestone 3. |
 
 ### Milestone 3: Follow-up (F-1 to F-9, A-17)
 
@@ -531,7 +517,7 @@ Each step below is sized as one PR (decision 12.14). `CLAUDE.md` says one PR per
 | --- | --- | --- | --- |
 | 4.1 | Install package: images, `install.md`, `.env` template, first-admin setup, health page, `update.sh`, `backup.sh` and `restore.sh` | A scripted install on a clean VM in CI; a backup, wipe, restore round trip | Follow `install.md` yourself on a fresh cloud VM |
 | 4.2 | Per-copy branding (name, logo and colors on screens, PDF and emails); template and phrase packs exported from Cecil's copy and imported into a client's | PDF branding test; pack round trip test | The PDF from the client copy shows only the client's branding, with no vendor footer |
-| 4.3 | License key: signed, offline check, read-only after lapsing, grace period | Expired, wrong-copy and tampered key tests; "reports still readable" test | Install an expired key on staging: you can read and download, but not edit |
+| 4.3 | License key: signed, offline check, read-only after lapsing, grace period | Expired, wrong-copy and tampered key tests; "reports still readable" test | Install an expired key on your Mac's copy: you can read and download, but not edit |
 | 4.4 | Company single sign-on (OIDC) for client copies, if the client wants it | Sign-on test with a test identity provider | Sign in with a test Microsoft account |
 | 4.5 | Milestone test: install the second copy with its own branding, users and templates | The two-copy isolation test (section 5) | Try a link, cookie and photo address from one copy in the other: all refused |
 
@@ -540,7 +526,7 @@ Each step below is sized as one PR (decision 12.14). `CLAUDE.md` says one PR per
 | Step | What | Tested by | How you check it |
 | --- | --- | --- | --- |
 | 5.1 | "Get ready for the visit" pack: last report, open items and their latest updates, on the iPad (from the Nov 23 "pre-visit prep pack" idea, and A-17 offline if not done in 3.6) | Offline tests | Cecil opens the pack in airplane mode |
-| 5.2 | Monitoring for Cecil's copy: uptime check, error alerts to you, nightly backup check | A deliberate failure raises an alert | You get the test alert |
+| 5.2 | Choose where Cecil's real copy runs (12.17) and set it up, with monitoring: uptime check, error alerts to you, nightly backup check | A deliberate failure raises an alert | You get the test alert |
 | 5.3 | Milestone test: the February hospital reports go out from v2 (v1 stays ready as the fallback) | | Cecil issues them |
 
 ---
@@ -565,9 +551,9 @@ Each step below is sized as one PR (decision 12.14). `CLAUDE.md` says one PR per
 
 ---
 
-## 12. Decisions I need from you
+## 12. Decisions
 
-My recommendation comes first in each item. Items marked **(Open question)** are from the spec's Open questions list. The plan depends on every one of them.
+Answered Nov 25: recommendations accepted for 1, 3, 4, 6, 7, 9, 10, 13, 14, 15, 16, 18 and 19. Provisional: 2, 5, 8 and 11. Changed: 12 and 17. **Still open: 20.** The outcomes and reasons are in `docs/decisions.md`. Items marked **(Open question)** are from the spec's Open questions list.
 
 1. **Hosting (Open question).** Recommend Option C: one multi-organization package. Cecil's copy runs on a small cloud server we manage, and clients either get an organization in it or the same package on their own server. Please ask Cecil's IT contact:
    - Do owners like MPT require their own server, or would a separate, walled-off organization on Cecil's copy do?
@@ -585,13 +571,13 @@ My recommendation comes first in each item. Items marked **(Open question)** are
 9. **A third priority scheme, Immediate / Short-term / Long-term (Open question).** Recommend not now (Cecil doesn't prefer it). Schemes become data in the template, so adding one later is small. If added, it needs a conversion rule, for example Immediate to High or Required.
 10. **Email reminders for overdue items (Open question).** Recommend on-screen flags only in Milestone 3, then an opt-in weekly email digest per person as a follow-on step. Email is needed anyway for sign-in links, so each copy needs an SMTP server either way.
 11. **Who owns Cecil's questionnaires, templates and phrases if the app is sold (Open question).** The plan depends on this for client copies. Recommend: they belong to Cecil's firm and are installed into a client's copy as a licensed pack. Only assessor-firm admins can edit or export them, and the client copy can use them while the license is current. The exact terms belong in the license agreement, which needs a lawyer.
-12. **Where Cecil's v1 data lives, and the v1 "Export everything" button.** Tell me whether he uses the v1 website, the claude.ai page, or both. Recommend approving a small v1 PR that adds "Export everything (.zip)" with photos, because v1's backup has no photos (section 9). Note: the spec says v1 reports import "from v1's backup export". That works for the report text, but the photos need this addition.
+12. **Where Cecil's v1 data lives, and the v1 "Export everything" button.** Tell me whether he uses the v1 website, the claude.ai page, or both. Recommend approving a small v1 PR that adds "Export everything (.zip)" with photos, because v1's backup has no photos (section 9). **Answer:** Cecil has no real reports in v1, so there's no import and no v1 change. A plain JSON import stays, for test data.
 13. **The offline next-visit checklist on the iPad.** Recommend yes, at the end of Milestone 3 or in Milestone 5 before February. It's the one place Cecil works on site inside the app.
 14. **PR size.** Recommend one PR per step (section 10) instead of one per milestone, with commits per numbered item as `CLAUDE.md` asks. If you'd rather keep one PR per milestone, I'll do that.
 15. **Always keep original photos.** Recommend yes, given "photos kept forever". It adds roughly 1 GB per visit, or a few dollars a month.
 16. **Move F-1 into Milestone 2 and A-17 into Milestone 3.** Recommend yes. A-17 (the next visit) needs action items and their follow-up status, and F-1 (items created at issue) is needed for that. This changes the spec's milestone grouping, so it needs your OK.
-17. **Cecil's copy: provider and who pays.** Recommend a small Linux VM (2 vCPU, 4 GB) plus a bucket and nightly off-site backups at a major cloud provider. That's roughly $30 to $80 a month, plus Claude usage at about $1 to $3 per walk-through. Tell me whose account it goes on.
+17. **Cecil's copy: provider and who pays.** Recommend a small Linux VM (2 vCPU, 4 GB) plus a bucket and nightly off-site backups at a major cloud provider. That's roughly $30 to $80 a month, plus Claude usage at about $1 to $3 per walk-through. **Answer:** no staging server for now. The package runs on Michael's Mac and stays portable. Hosting for Cecil's real copy is chosen before he uses v2 for real.
 18. **Program coordinator (Open question; F-10 is "Could").** Recommend deferring until after Milestone 3, once you've asked at next week's meeting. The data model already records the assessor firm on every assessment, so a coordinator view across firms in a client's copy is a read-only screen later, not a redesign.
 19. **Site videos** (Nov 23 notes, not in the spec). Recommend: out of scope for v2's first release. If wanted, store a link in General comments rather than the video file.
 
-Once you approve the plan, I'll record the design choices it makes in `docs/decisions.md` (it isn't changed in this PR, which holds only this file).
+20. **Whose Claude account drafting uses in each copy (Open question).** Left out of the first version of this list by mistake. Recommend: Cecil's own Anthropic account for his copy. For a client's own copy, use the client's own account: an Anthropic API key, or Claude through their own Amazon Bedrock, Google Vertex AI or Microsoft Foundry account. Use Cecil's key there only with the client's written OK (section 6). Needed before step 2.8.
