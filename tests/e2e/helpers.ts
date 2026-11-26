@@ -9,7 +9,10 @@ const fixture = (name: string): any => JSON.parse(readFileSync(new URL(`../fixtu
 
 /** v1 loads libraries and fonts from CDNs; answer them locally so tests don't need the internet. */
 export async function blockCdns(context: BrowserContext): Promise<void> {
-  await context.route(/^https:\/\/(cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com)\//, (route) => route.fulfill({ status: 204, body: "" }));
+  // Answer with an empty file of the right type: WebKit logs an error for a stylesheet that isn't CSS.
+  const types: Record<string, string> = { stylesheet: "text/css", script: "text/javascript", font: "font/woff2" };
+  await context.route(/^https:\/\/(cdnjs\.cloudflare\.com|cdn\.jsdelivr\.net|fonts\.googleapis\.com|fonts\.gstatic\.com)\//,
+    (route) => route.fulfill({ status: 200, body: "", contentType: types[route.request().resourceType()] ?? "text/plain" }));
 }
 
 /** A name no other test (or browser) in this run uses. */

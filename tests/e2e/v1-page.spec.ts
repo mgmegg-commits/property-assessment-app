@@ -47,8 +47,10 @@ test("a report made and issued in v1's screens becomes follow-up items", async (
   await page.click('[data-act="issueReport"]');
   await expect(page.getByText(/issued and locked/)).toBeVisible();
   await signIn(request);
-  await expect.poll(async () => (await items(request, report.propertyName)).length).toBeGreaterThan(0);
-  const made = await items(request, report.propertyName);
+  // v1's test report always has the same property name, so another browser's run may have issued one too: count this report's.
+  const ours = async () => (await items(request, report.propertyName)).filter((i: any) => i.reportId === id);
+  await expect.poll(async () => (await ours()).length).toBeGreaterThan(0);
+  const made = await ours();
   const actions = report.sections.flatMap((s: any) => s.items.flatMap((i: any) => i.findings)).filter((f: any) => !f.observationOnly);
   expect(made).toHaveLength(actions.length);
   expect(made.map((i: any) => i.number)).toEqual(made.map((_: unknown, n: number) => `A${n + 1}`));
