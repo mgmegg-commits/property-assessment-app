@@ -10,8 +10,10 @@
 import { DEFAULT_PHRASES } from "./phrases.js";
 import { deepClone } from "../util/ids.js";
 import type { ReportSettings } from "./types.js";
+import disclaimerSeed from "../data/disclaimer.json" with { type: "json" };
 
-export const DEFAULT_DISCLAIMER = "This report was prepared by {COMPANY} for the exclusive use of {CLIENT} in connection with {PROPERTY}. It is based on a visual, non-invasive walk-through of accessible areas on the date of the assessment, on information provided by site personnel, and on the conditions observed at that time. It is not an engineering study, a code-compliance review, or a warranty of the condition of the property, and concealed or latent conditions may exist that were not observed. Regulatory compliance items reflect information confirmed by the tenant or operator and were not independently verified. Any cost or timing references are opinions for planning purposes only. No other party may rely on this report without the written consent of {COMPANY} and {CLIENT}.";
+/** The cover disclaimer, with {COMPANY}, {CLIENT} and {PROPERTY} filled in when printed. From src/data/disclaimer.json. */
+export const DEFAULT_DISCLAIMER: string = disclaimerSeed.text;
 
 export function defaultSettings(): ReportSettings {
   return {

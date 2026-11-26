@@ -1,0 +1,388 @@
+[
+  {
+    "key": "healthcare",
+    "name": "Healthcare Master",
+    "version": 2,
+    "sections": [
+      {
+        "key": "env",
+        "title": "Building Envelope",
+        "compliance": false,
+        "items": [
+          {
+            "key": "roof",
+            "label": "Roof"
+          },
+          {
+            "key": "elevations",
+            "label": "Elevations"
+          },
+          {
+            "key": "openings",
+            "label": "Openings"
+          },
+          {
+            "key": "sealants",
+            "label": "Sealant and Flashings"
+          }
+        ]
+      },
+      {
+        "key": "str",
+        "title": "Structure",
+        "compliance": false,
+        "items": [
+          {
+            "key": "horizontal",
+            "label": "Horizontal Structure (Slabs, Floors, Joists and Beams, and Roof Framing)"
+          },
+          {
+            "key": "vertical",
+            "label": "Vertical Structure (Columns)"
+          }
+        ]
+      },
+      {
+        "key": "int",
+        "title": "Interior",
+        "compliance": false,
+        "items": [
+          {
+            "key": "ceiling",
+            "label": "Ceiling"
+          },
+          {
+            "key": "flooring",
+            "label": "Flooring"
+          },
+          {
+            "key": "walls",
+            "label": "Walls"
+          },
+          {
+            "key": "millwork",
+            "label": "Millwork"
+          },
+          {
+            "key": "rooms",
+            "label": "Patient Rooms"
+          },
+          {
+            "key": "dining",
+            "label": "Cafeteria"
+          },
+          {
+            "key": "common",
+            "label": "Common Areas"
+          },
+          {
+            "key": "elevators",
+            "label": "Elevators"
+          },
+          {
+            "key": "special",
+            "label": "Treatment Areas"
+          }
+        ]
+      },
+      {
+        "key": "mep",
+        "title": "MEP Systems",
+        "compliance": false,
+        "items": [
+          {
+            "key": "plumbing",
+            "label": "Plumbing"
+          },
+          {
+            "key": "hvac",
+            "label": "HVAC"
+          },
+          {
+            "key": "electrical",
+            "label": "Electrical"
+          }
+        ]
+      },
+      {
+        "key": "reg",
+        "title": "Regulatory Compliance",
+        "compliance": true,
+        "items": [
+          {
+            "key": "life",
+            "label": "Life Safety"
+          },
+          {
+            "key": "lic",
+            "label": "Hospital Licensing"
+          },
+          {
+            "key": "agency",
+            "label": "TJC / DNV"
+          },
+          {
+            "key": "ada",
+            "label": "ADA"
+          },
+          {
+            "key": "elevlic",
+            "label": "Elevator Licensing"
+          },
+          {
+            "key": "environmental",
+            "label": "Environmental"
+          },
+          {
+            "key": "capital",
+            "label": "Capital Additions or Improvements"
+          },
+          {
+            "key": "other",
+            "label": "Other"
+          }
+        ]
+      },
+      {
+        "key": "site",
+        "title": "Site",
+        "compliance": false,
+        "items": [
+          {
+            "key": "paving",
+            "label": "Parking Surfaces"
+          },
+          {
+            "key": "walks",
+            "label": "Sidewalks and Hardscapes"
+          },
+          {
+            "key": "landscaping",
+            "label": "Landscaping"
+          },
+          {
+            "key": "detention",
+            "label": "Water Detention Areas"
+          }
+        ]
+      }
+    ],
+    "sentences": {
+      "item": {
+        "G": {
+          "default": "Observed in good condition.",
+          "withFindings": "Observed in good condition, with minor exceptions noted below.",
+          "noMaterialIssues": "Observed in good condition. No material issues were noted."
+        },
+        "F": {
+          "default": "Observed in fair condition, with exceptions noted below.",
+          "noMaterialIssues": "Observed in fair condition, consistent with its age and use. No material issues were noted."
+        },
+        "P": {
+          "default": "Observed in poor condition. Deficiencies noted below require attention."
+        },
+        "NA": {
+          "default": "Not applicable to this property."
+        }
+      },
+      "section": {
+        "G": "Observed in good condition, with minor exceptions noted below.",
+        "F": "Observed in fair condition, with exceptions noted below.",
+        "P": "Observed in poor condition. Deficiencies noted below require attention."
+      }
+    }
+  },
+  {
+    "key": "realestate",
+    "name": "Real Estate",
+    "version": 2,
+    "sections": [
+      {
+        "key": "env",
+        "title": "Building Envelope",
+        "compliance": false,
+        "items": [
+          {
+            "key": "roof",
+            "label": "Roof"
+          },
+          {
+            "key": "elevations",
+            "label": "Elevations"
+          },
+          {
+            "key": "openings",
+            "label": "Openings"
+          },
+          {
+            "key": "sealants",
+            "label": "Sealant and Flashings"
+          }
+        ]
+      },
+      {
+        "key": "str",
+        "title": "Structure",
+        "compliance": false,
+        "items": [
+          {
+            "key": "horizontal",
+            "label": "Horizontal Structure (Slabs, Floors, Joists and Beams, and Roof Framing)"
+          },
+          {
+            "key": "vertical",
+            "label": "Vertical Structure (Columns)"
+          }
+        ]
+      },
+      {
+        "key": "int",
+        "title": "Interior",
+        "compliance": false,
+        "items": [
+          {
+            "key": "ceiling",
+            "label": "Ceiling"
+          },
+          {
+            "key": "flooring",
+            "label": "Flooring"
+          },
+          {
+            "key": "walls",
+            "label": "Walls"
+          },
+          {
+            "key": "millwork",
+            "label": "Millwork"
+          },
+          {
+            "key": "rooms",
+            "label": "Rooms"
+          },
+          {
+            "key": "dining",
+            "label": "Dining / Food Prep"
+          },
+          {
+            "key": "common",
+            "label": "Common Areas"
+          },
+          {
+            "key": "elevators",
+            "label": "Elevators"
+          },
+          {
+            "key": "special",
+            "label": "Special Areas"
+          }
+        ]
+      },
+      {
+        "key": "mep",
+        "title": "MEP Systems",
+        "compliance": false,
+        "items": [
+          {
+            "key": "plumbing",
+            "label": "Plumbing"
+          },
+          {
+            "key": "hvac",
+            "label": "HVAC"
+          },
+          {
+            "key": "electrical",
+            "label": "Electrical"
+          }
+        ]
+      },
+      {
+        "key": "reg",
+        "title": "Regulatory Compliance",
+        "compliance": true,
+        "items": [
+          {
+            "key": "life",
+            "label": "Life Safety"
+          },
+          {
+            "key": "lic",
+            "label": "Building Licensing"
+          },
+          {
+            "key": "agency",
+            "label": "Regulatory Agencies"
+          },
+          {
+            "key": "ada",
+            "label": "ADA"
+          },
+          {
+            "key": "elevlic",
+            "label": "Elevator Licensing"
+          },
+          {
+            "key": "environmental",
+            "label": "Environmental"
+          },
+          {
+            "key": "capital",
+            "label": "Capital Additions or Improvements"
+          },
+          {
+            "key": "other",
+            "label": "Other"
+          }
+        ]
+      },
+      {
+        "key": "site",
+        "title": "Site",
+        "compliance": false,
+        "items": [
+          {
+            "key": "paving",
+            "label": "Parking Surfaces"
+          },
+          {
+            "key": "walks",
+            "label": "Sidewalks and Hardscapes"
+          },
+          {
+            "key": "landscaping",
+            "label": "Landscaping"
+          },
+          {
+            "key": "detention",
+            "label": "Water Detention Areas"
+          }
+        ]
+      }
+    ],
+    "sentences": {
+      "item": {
+        "G": {
+          "default": "Observed in good condition.",
+          "withFindings": "Observed in good condition, with minor exceptions noted below.",
+          "noMaterialIssues": "Observed in good condition. No material issues were noted."
+        },
+        "F": {
+          "default": "Observed in fair condition, with exceptions noted below.",
+          "noMaterialIssues": "Observed in fair condition, consistent with its age and use. No material issues were noted."
+        },
+        "P": {
+          "default": "Observed in poor condition. Deficiencies noted below require attention."
+        },
+        "NA": {
+          "default": "Not applicable to this property."
+        }
+      },
+      "section": {
+        "G": "Observed in good condition, with minor exceptions noted below.",
+        "F": "Observed in fair condition, with exceptions noted below.",
+        "P": "Observed in poor condition. Deficiencies noted below require attention."
+      }
+    }
+  }
+]

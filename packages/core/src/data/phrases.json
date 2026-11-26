@@ -1,0 +1,107 @@
+[
+  {
+    "id": "ph1",
+    "title": "TPO repairs",
+    "text": "TPO repairs should be per manufacturer specifications to protect the roof warranty. This should include proper materials including cut edge sealant usage."
+  },
+  {
+    "id": "ph2",
+    "title": "Roof ponding",
+    "text": "Proper tapering and cricketing is needed to eliminate roof ponding."
+  },
+  {
+    "id": "ph3",
+    "title": "Roof debris",
+    "text": "Roof debris needs clearing, including vegetation and mechanical parts."
+  },
+  {
+    "id": "ph4",
+    "title": "Roof report",
+    "text": "A roofing report will provide needed information to determine remaining useful life. Then scope and budgets can be made (preferably for a ten year period)."
+  },
+  {
+    "id": "ph5",
+    "title": "Gutters",
+    "text": "Gutters and downspouts need to be cleaned and in some areas reattached. Verify drains flow away from the buildings as designed."
+  },
+  {
+    "id": "ph6",
+    "title": "Roof flashings",
+    "text": "Repair roof flashings. This is best done in conjunction with other roof repairs."
+  },
+  {
+    "id": "ph7",
+    "title": "Efflorescence",
+    "text": "Clean efflorescence from block. If it returns, make corrections to the top of walls where rain is getting into the block system. The wall caps should have slope."
+  },
+  {
+    "id": "ph8",
+    "title": "Windows at PTACs",
+    "text": "Repair windows at PTAC units to prevent rain intrusion."
+  },
+  {
+    "id": "ph9",
+    "title": "Failed window seals",
+    "text": "Replace windows that have failed vacuum seals."
+  },
+  {
+    "id": "ph10",
+    "title": "Ceiling stains",
+    "text": "After leaks have been properly repaired, stained ceiling tiles need to be replaced, and painted ceiling damage repaired."
+  },
+  {
+    "id": "ph11",
+    "title": "Dust at air supply",
+    "text": "Verify proper filter changes are occurring. Inspect ducts as well. Keep ceiling tiles in place to prevent dust from above ceilings getting into conditioned areas."
+  },
+  {
+    "id": "ph12",
+    "title": "Millwork",
+    "text": "Millwork repairs need to be with washable surfaces, especially in wet areas."
+  },
+  {
+    "id": "ph13",
+    "title": "Plumbing leaks",
+    "text": "All plumbing leaks need to be investigated and repaired. Galvanized pipe and cracked cast iron pipe will need to be replaced long term."
+  },
+  {
+    "id": "ph14",
+    "title": "HVAC maintenance",
+    "text": "Maintenance and repair of HVAC components needs improvement. Exhaust fans not operating causes test and balance issues with air pressures. Failure to service units and regularly change air filters allows dust to accumulate on ceilings near air vents."
+  },
+  {
+    "id": "ph15",
+    "title": "LED lighting",
+    "text": "Convert all areas to LED lighting. Research the best companies to partner with and look for tax incentives and rebates."
+  },
+  {
+    "id": "ph16",
+    "title": "Fire alarm",
+    "text": "Repairs should be made and trouble alerts and alarms need to be cleared from the alarm panel."
+  },
+  {
+    "id": "ph17",
+    "title": "Asphalt",
+    "text": "A paving plan would be helpful to schedule crack sealing, seal coating, and striping. Maintenance and annual repairs are needed and seal coating should be scheduled."
+  },
+  {
+    "id": "ph18",
+    "title": "Alligatoring",
+    "text": "Areas with alligatoring asphalt should be cut out, the subbase repaired, and repaved prior to seal coating. It should be a regular annual maintenance item."
+  },
+  {
+    "id": "ph19",
+    "title": "Sidewalks",
+    "text": "Some repair to sidewalk cracks would help prevent further damage."
+  },
+  {
+    "id": "ph20",
+    "title": "Tree pruning",
+    "text": "Prune trees overhanging roof areas. This will aid in keeping roofs clean."
+  },
+  {
+    "id": "ph21",
+    "title": "Landscaping",
+    "text": "A landscaping and maintenance plan should be implemented for the property. Vegetation should be kept away from the buildings and windows."
+  }
+]
