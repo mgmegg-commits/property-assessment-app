@@ -140,7 +140,7 @@ The working assumption is one copy of the app per client, on the client's own se
 
 ## Milestones
 
-Nov 26, 2026: simplified for Cecil's beta test with a skilled nursing operator that owns 45 sites (`docs/plan.md` section 10). The Nov 25 milestones 2 to 5 are replaced by these. What they had beyond this waits until a paying customer needs it.
+Nov 26, 2026: simplified for Cecil's beta test with a skilled nursing operator that owns 45 sites (`docs/plan.md`). The Nov 25 milestones 2 to 5 are replaced by these. What they had beyond this waits until a paying customer needs it.
 
 1. **Plan.** Claude Code proposes the architecture, data model and milestone breakdown; nothing is coded until it's reviewed. Done Nov 25.
 2. **Foundation.** Steps 2.1 (one-command start, HTTPS for the iPad, CI) and 2.2 (v1's report model, tests and migrations in `packages/core`). Done Nov 26.
@@ -163,7 +163,7 @@ Add a row after every meeting with Cecil; this table is the source of truth for 
 | Nov 26, 2026 | Facility, assigned person, due date and status are entered on the Follow-up page on the client's behalf; each change records who and when |
 | Nov 26, 2026 | The Follow-up page and the phone page follow the prototype in `docs/prototype/` |
 | Nov 25, 2026 | Drafting uses Cecil's own Anthropic account in his copy and the client's own account in a client copy; Cecil's key in a client copy only with the client's written OK. Until Cecil's copy goes live, real drafting tests on Michael's Mac use Michael's own API key |
-| Nov 25, 2026 | Plan approved (`docs/plan.md`); details and reasons in `docs/decisions.md` |
+| Nov 25, 2026 | Plan approved (now `docs/archive/plan-2026-11-25.md`); details and reasons in `docs/decisions.md` |
 | Nov 25, 2026 | Hosting: build once, install anywhere. One package keeps each organization's data separate; a client gets its own organization in Cecil's copy or the same package on its own server. Hosting details to confirm with Cecil's IT contact before Milestone 4 |
 | Nov 25, 2026 | No staging server for now; the package runs on Michael's Mac with one command and fixture data. Hosting for Cecil's real copy is chosen before he uses v2 for real |
 | Nov 25, 2026 | Provisional: in a client's own copy, Cecil works inside that copy as an assessor user. Confirm with Cecil's IT contact before Milestone 4 |

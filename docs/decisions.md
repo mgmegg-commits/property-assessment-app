@@ -2,7 +2,7 @@
 
 Decisions agreed with Cecil live in the Decisions log in `docs/spec.md`. This file records design choices made while building that the spec doesn't cover. Newest first.
 
-"Plan 12.x" refers to the numbered decisions in `docs/plan.md` section 12. **Provisional** means we're building on it now, and it may change once confirmed.
+"Plan 12.x" refers to the numbered decisions in section 12 of `docs/archive/plan-2026-11-25.md`. **Provisional** means we're building on it now, and it may change once confirmed.
 
 | Date | Decision | Why |
 | --- | --- | --- |
@@ -13,7 +13,7 @@ Decisions agreed with Cecil live in the Decisions log in `docs/spec.md`. This fi
 | Nov 26, 2026 | **The Follow-up page edits an item in place:** tapping a row opens its facility, assigned person, due date, status buttons and a note, with its history. On a phone the table becomes one card per item. | The prototype shows the table but no editing; fewest clicks, and it must work at iPhone width |
 | Nov 26, 2026 | **The Follow-up page picks a property with one-tap buttons** when there's more than one; its export covers the chosen property. | Items are "by property"; buttons rather than a dropdown (CLAUDE.md) |
 | Nov 26, 2026 | **Photos on the phone page come only through the link** (`/api/link/<token>/files/<id>`), and only those of that property's open items and their updates. A photo sent from a link is shrunk on the phone (at most 1600 px) and can only be attached by that link. | A link sees nothing beyond its property's open items |
-| Nov 26, 2026 | **The simplified build replaces the Nov 25 milestones** (`docs/plan.md` section 10). Sections 10 to 12 of the Nov 25 plan are kept, collapsed, at the end of `docs/plan.md`, so the "Plan 12.x" references below still resolve. Sections 1 to 9 stay as the long-term design. | Michael: the plan was too big for the beta with a skilled nursing operator (45 sites) |
+| Nov 26, 2026 | **The simplified build replaces the Nov 25 milestones** (`docs/plan.md`). The Nov 25 plan is archived whole in `docs/archive/plan-2026-11-25.md`, so the "Plan 12.x" references below still resolve; its sections 1 to 9 stay as the long-term design. | Michael: the plan was too big for the beta with a skilled nursing operator (45 sites) |
 | Nov 26, 2026 | **v1's page is served as built from the pinned commit, plus one script tag** before `</body>` that adds a "Follow-up" button next to "Branding & settings" on v1's home page. The file in `apps/v1-web` is never changed, and a test checks the served page is that file plus the tag. Its content security policy allows v1's inline code (by hash), its CDN libraries (cdnjs, jsDelivr) and Google Fonts. | "Keep v1's screens exactly as they are", and "linked from v1's home page". v1 loads its PDF, Excel, photo and font libraries from those CDNs, so they stay. |
 | Nov 26, 2026 | **Deleting a report hides it** (it disappears from the list and answers 404) rather than removing it. | "Reports and photos kept forever" |
 | Nov 26, 2026 | **A property is identified by the property name on its issued report.** Follow-up items, links and the export are grouped by it. | v1 has no property record; the name is what Cecil types and what prints |
@@ -58,7 +58,7 @@ Decisions agreed with Cecil live in the Decisions log in `docs/spec.md`. This fi
 | Nov 25, 2026 | **Provisional: Cecil's questionnaires, templates and phrases belong to his firm.** They're installed into a client copy as a licensed pack that only assessor-firm admins can edit or export (Plan 12.11). Terms go to a lawyer later. | His question set is the "secret sauce" (Nov 23) |
 | Nov 25, 2026 | **No v1 import and no "Export everything" button in v1** (Plan 12.12). Cecil has no real reports in v1. A plain JSON import stays, for loading test data (v1 backup JSON and fixtures). v1's document migrations 1 to 6 are still ported, so v1-shaped test data opens. | Nothing real to carry over |
 | Nov 25, 2026 | **Offline next-visit checklist on the iPad**, at the end of Milestone 3 or in Milestone 5 before February (Plan 12.13) | It's the one place Cecil works on site inside the app |
-| Nov 25, 2026 | **One PR per step** of a milestone (the steps are in `docs/plan.md` section 10), with a commit per numbered item (Plan 12.14) | Smaller reviews. Milestone 2 alone would be a very large PR. |
+| Nov 25, 2026 | **One PR per step** of a milestone (the steps are in section 10 of `docs/archive/plan-2026-11-25.md`), with a commit per numbered item (Plan 12.14) | Smaller reviews. Milestone 2 alone would be a very large PR. |
 | Nov 25, 2026 | **Original photos are always kept**, alongside the 2048 px report copy (Plan 12.15) | Photos are kept forever. About 1 GB per visit. |
 | Nov 25, 2026 | **F-1 moves into Milestone 2 and A-17 into Milestone 3** (Plan 12.16) | A-17 needs action items and their follow-up status, and F-1 creates the items at issue |
 | Nov 25, 2026 | **The program coordinator view is deferred until after Milestone 3** (Plan 12.18). Every assessment records its assessor firm, so it can be added without a redesign. | F-10 is a "Could". The coordinator's needs are asked at next week's meeting. |
