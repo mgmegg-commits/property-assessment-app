@@ -5,13 +5,13 @@ Property condition assessments from walk-through to verified fix, for Cecil Ingr
 Cecil walks a property with a voice memo and photos; the app drafts the report; he reviews and issues it. The client then assigns each action item to a facility and a person, the facility updates it from a phone, and Cecil verifies the fix at the next visit.
 
 - **Spec:** [`docs/spec.md`](docs/spec.md): requirements, data model, milestones, decisions log, open questions
-- **Build plan:** [`docs/plan.md`](docs/plan.md): architecture, data model, milestone steps
+- **Build plan:** [`docs/plan.md`](docs/plan.md): the simplified build; the full Nov 25 design is in [`docs/archive/`](docs/archive/)
 - **Instructions for Claude Code:** [`CLAUDE.md`](CLAUDE.md)
 - **Design choices made during the build:** [`docs/decisions.md`](docs/decisions.md)
 - **Meeting notes with Cecil:** [`docs/meetings/`](docs/meetings/)
 - **v1 (reference):** [`mgmegg-commits/cecil-report-app`](https://github.com/mgmegg-commits/cecil-report-app)
 
-Status: the simplified build (`docs/plan.md` section 10). v1's screens, served unchanged, on a v2 server and database, plus follow-up on action items:
+Status: the simplified build (`docs/plan.md`). v1's screens, served unchanged, on a v2 server and database, plus follow-up on action items:
 
 - **Reports:** v1's own screens at `/`, exactly as Cecil approved them, signed in with one password. Drafting and the spelling check run on the server.
 - **Follow-up** (button on v1's home page, or `/follow-up`): each issued report's action items by property, with status, overdue flags and filters. The office assigns facility, person and due date, and changes status, on the client's behalf. Export to Excel with v1's tracker columns.
