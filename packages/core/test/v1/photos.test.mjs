@@ -92,6 +92,6 @@ test("extra places follow deleted, merged and moved findings and subsections", (
 
 test("schema 6: older photos get an empty list of extra places", () => {
   const a = migrateAssessment({ schema: 5, sections: [], photos: [{ id: "p", item: null, findings: [] }] });
-  assert.equal(SCHEMA_VERSION, 6);
+  assert.equal(SCHEMA_VERSION, 7); // Changed in v2: schema 7 is v2's first step (v1: 6)
   assert.deepEqual(a.photos[0].alsoIn, []);
 });

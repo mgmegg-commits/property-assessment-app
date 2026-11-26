@@ -159,10 +159,12 @@ test("merging findings keeps the first's text, appends the rest, and combines ph
   const { PRIORITY_ORDER } = await import("@crb/core");
   const a = newAssessment({ templateKey: "healthcare" });
   const roof = item(a, "env.roof");
+  // Changed in v2 (schema 7): only a v1 report carries due dates, in v1FollowUp (v1: f.action.due).
   const make = (description, location, title, priority, due) => {
     const f = newFinding();
     Object.assign(f, { description, location });
-    Object.assign(f.action, { title, recommendation: "TPO repairs should be per manufacturer specifications.", priority, due });
+    Object.assign(f.action, { title, recommendation: "TPO repairs should be per manufacturer specifications.", priority });
+    if (due) f.v1FollowUp = { due };
     roof.findings.push(f);
     return f;
   };
@@ -180,7 +182,7 @@ test("merging findings keeps the first's text, appends the rest, and combines ph
   assert.equal(kept.description, "TPO repairs not per specs at the west wing.\n\nSame at Building C.", "others' text appended, duplicates once");
   assert.equal(kept.location, "West wing; Building C");
   assert.equal(kept.action.recommendation, "TPO repairs should be per manufacturer specifications.");
-  assert.deepEqual([kept.action.priority, kept.action.due], ["H", "2027-01-15"], "most urgent priority, earliest due date");
+  assert.deepEqual([kept.action.priority, kept.v1FollowUp.due], ["H", "2027-01-15"], "most urgent priority, earliest due date");
   const ordered = a.photos.filter((p) => p.findings.includes(f1.id)).sort((x, y) => x.order - y.order).map((p) => p.id);
   assert.deepEqual(ordered, ["p1", "p2", "p3", "p4"], "every photo, the first finding's first");
 });

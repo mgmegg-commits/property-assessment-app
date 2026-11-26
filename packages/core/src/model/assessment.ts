@@ -8,9 +8,10 @@ import { TEMPLATES, buildSections, PRIORITY_ORDER, PRIORITY_CONVERSION, priority
 import { sectionsFromList } from "./sections.js";
 import { uid, deepClone } from "../util/ids.js";
 import { todayIso } from "../util/format.js";
-import type { ActionOrder, Assessment, Finding, Item, ListSection, Photo, PriorityScheme, Section } from "./types.js";
+import { SCHEMA_VERSION } from "./migrations.js";
+import type { ActionOrder, Assessment, Finding, FollowUp, FollowUpLookup, Item, ListSection, Photo, PriorityScheme, Section } from "./types.js";
 
-export const SCHEMA_VERSION = 6;
+export { SCHEMA_VERSION, migrateAssessment } from "./migrations.js";
 
 export interface NewAssessmentOptions {
   templateKey: string;
@@ -96,64 +97,25 @@ function copyPropertyDetails(target: Assessment, source: CopySource): void {
   }
 }
 
-/* eslint-disable @typescript-eslint/no-explicit-any -- documents saved by earlier versions have no fixed shape */
-
-/** Upgrades documents saved by earlier versions of the app. */
-export function migrateAssessment(a: any): any {
-  if (!a || a.schema >= SCHEMA_VERSION) return a;
-  if (!(a.schema >= 2)) upgradeToSchema2(a);
-  for (const section of a.sections || []) {
-    for (const item of section.items) {
-      // Schema 3: an action's "owner" became its "assignee".
-      for (const finding of item.findings) {
-        if (!finding.action) continue;
-        finding.action.assignee ??= finding.action.owner || "";
-        delete finding.action.owner;
-      }
-      // Schema 4: a subsection a draft added is "suggested" until Cecil keeps it.
-      if (item.addedByDraft) item.suggested = true;
-      delete item.addedByDraft;
-    }
-  }
-  // Schema 5: the facility contact for the client's follow-up tracker, and priority labels per report.
-  a.facilityContact ??= "";
-  a.priorityScheme ??= "hml";
-  // Schema 6: a photo can also be used in other places ("Also use here"), and the
-  // action list order is saved (earlier reports were always sorted by priority).
-  a.actionOrder ??= "priority";
-  for (const photo of a.photos || []) photo.alsoIn ??= [];
-  a.schema = SCHEMA_VERSION;
-  return a;
-}
-
-/** Schema 2: "issues" became "findings", and photos gained markup. */
-function upgradeToSchema2(a: any): void {
-  for (const section of a.sections || []) {
-    section.summary ??= section.narrative || "";
-    delete section.narrative;
-    for (const item of section.items) {
-      item.findings ??= (item.issues || []).map((f: any) => ({ ...f, observationOnly: Boolean(f.obsOnly) }));
-      item.noMaterialIssues ??= Boolean(item.nmi);
-      delete item.issues; delete item.nmi;
-      item.findings.forEach((f: any) => delete f.obsOnly);
-    }
-  }
-  for (const photo of a.photos || []) {
-    photo.findings ??= photo.issues || [];
-    photo.markup ??= [];
-    delete photo.issues;
-  }
-}
-
-/* eslint-enable @typescript-eslint/no-explicit-any */
-
-/** A new finding. Its action has no assignee or due date: the client or tenant decides those. */
-export function newFinding({ assignee = "" }: { assignee?: string } = {}): Finding {
+/**
+ * A new finding. Its action has no assignee or due date: the client or tenant
+ * decides those, on the live action item (schema 7).
+ */
+export function newFinding(): Finding {
   return {
     id: uid("f"), description: "", location: "", observationOnly: false,
-    action: { title: "", recommendation: "", priority: "", assignee, due: "" },
+    action: { title: "", recommendation: "", priority: "" },
   };
 }
+
+const NO_FOLLOW_UP: FollowUpLookup = new Map();
+
+/**
+ * Who fixes a finding's action and by when: its live action item's values from
+ * `followUp`, or else what a v1 report saved on the finding. Empty when neither.
+ */
+export const followUpOf = (finding: Finding, followUp: FollowUpLookup = NO_FOLLOW_UP): FollowUp =>
+  followUp.get(finding.id) ?? finding.v1FollowUp ?? {};
 
 /* ---------- Items ---------- */
 
@@ -219,32 +181,39 @@ export interface ListedAction extends ListedFinding {
 }
 
 type Ordered = { finding: Finding; order: number };
-const compareDue = (x: Ordered, y: Ordered) => (x.finding.action.due || "9999").localeCompare(y.finding.action.due || "9999");
-const comparePriority = (x: Ordered, y: Ordered) => (PRIORITY_ORDER[x.finding.action.priority] ?? 3) - (PRIORITY_ORDER[y.finding.action.priority] ?? 3);
+type Compare = (x: Ordered, y: Ordered) => number;
+const comparePriority: Compare = (x, y) => (PRIORITY_ORDER[x.finding.action.priority] ?? 3) - (PRIORITY_ORDER[y.finding.action.priority] ?? 3);
 
 /** How the action list is ordered, chosen on the Report tab and saved with the report. */
 export const ACTION_ORDERS: Record<ActionOrder, string> = { report: "Report order", priority: "Priority", due: "Due date" };
-const ORDER_COMPARE: Record<ActionOrder, (x: Ordered, y: Ordered) => number> = {
-  report: (x, y) => x.order - y.order,
-  priority: (x, y) => comparePriority(x, y) || compareDue(x, y) || x.order - y.order,
-  due: (x, y) => compareDue(x, y) || comparePriority(x, y) || x.order - y.order, // no due date (TBD) last
-};
+
+function orderCompare(order: ActionOrder, followUp: FollowUpLookup): Compare {
+  const due = (x: Ordered) => followUpOf(x.finding, followUp).due || "9999"; // no due date (TBD) last
+  const compareDue: Compare = (x, y) => due(x).localeCompare(due(y));
+  switch (order) {
+    case "report": return (x, y) => x.order - y.order;
+    case "due": return (x, y) => compareDue(x, y) || comparePriority(x, y) || x.order - y.order;
+    default: return (x, y) => comparePriority(x, y) || compareDue(x, y) || x.order - y.order;
+  }
+}
 
 /**
  * Actions in the report's chosen order (report order, priority, or due date),
  * numbered A1, A2… in that order (FR-OUT-2). The screen, PDF and exports all use it.
+ * Due dates live on the action items, so `followUp` gives them by finding id;
+ * without it, only due dates a v1 report saved count, and the rest are TBD.
  */
-export function listActions(a: Assessment): ListedAction[] {
+export function listActions(a: Assessment, followUp: FollowUpLookup = NO_FOLLOW_UP): ListedAction[] {
   const actions: ListedAction[] = listFindings(a)
     .filter((x) => !x.finding.observationOnly)
     .map((x, order) => ({ ...x, order, actionNumber: "" }));
-  actions.sort(ORDER_COMPARE[a.actionOrder] || ORDER_COMPARE.priority);
+  actions.sort(orderCompare(a.actionOrder, followUp));
   actions.forEach((x, i) => { x.actionNumber = `A${i + 1}`; });
   return actions;
 }
 
-export function actionNumbersById(a: Assessment): Record<string, string> {
-  return Object.fromEntries(listActions(a).map((x) => [x.finding.id, x.actionNumber]));
+export function actionNumbersById(a: Assessment, followUp: FollowUpLookup = NO_FOLLOW_UP): Record<string, string> {
+  return Object.fromEntries(listActions(a, followUp).map((x) => [x.finding.id, x.actionNumber]));
 }
 
 export interface PriorityCounts {

@@ -1,0 +1,483 @@
+{
+ "id": "a-fixture-schema-7",
+ "kind": "assessment",
+ "schema": 7,
+ "templateKey": "realestate",
+ "templateName": "Real Estate",
+ "templateVersion": 2,
+ "propertyName": "Example Warehouse",
+ "clientName": "Example Owner LLC",
+ "priorityScheme": "rr",
+ "actionOrder": "report",
+ "versionDay": "2026-11-24",
+ "useType": "Warehouse",
+ "operator": "Example Operator",
+ "facilityContact": "Pat Example; pat@example.com",
+ "address": "200 Example Blvd, Birmingham, AL",
+ "lat": "33.500000",
+ "lng": "-86.800000",
+ "date": "2026-11-24",
+ "time": "13:30",
+ "preparedBy": "Cecil Ingram",
+ "weather": "Overcast",
+ "personnel": [
+  {
+   "name": "Pat Example",
+   "title": "Facility Manager",
+   "org": "Example Operator"
+  }
+ ],
+ "parcels": [
+  {
+   "pid": "5678",
+   "address": "200 EXAMPLE BLVD",
+   "desc": "TWO BUILDINGS"
+  }
+ ],
+ "generalComments": "Schema 7 fixture: made and issued in v2.",
+ "sections": [
+  {
+   "key": "env",
+   "title": "Building Envelope",
+   "compliance": false,
+   "rating": "auto",
+   "summary": "",
+   "items": [
+    {
+     "key": "roof",
+     "label": "Roof",
+     "hidden": false,
+     "rating": "P",
+     "noMaterialIssues": false,
+     "notes": "Ponding across the north half.",
+     "confirmed": false,
+     "findings": [
+      {
+       "id": "f-ponding",
+       "description": "Water ponds across the north half of the roof.",
+       "location": "North half",
+       "observationOnly": false,
+       "action": {
+        "title": "Correct roof ponding",
+        "recommendation": "Proper tapering and cricketing is needed to eliminate roof ponding.",
+        "priority": "REQ"
+       }
+      }
+     ]
+    },
+    {
+     "key": "elevations",
+     "label": "Elevations",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "openings",
+     "label": "Openings",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "sealants",
+     "label": "Sealant and Flashings",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    }
+   ]
+  },
+  {
+   "key": "str",
+   "title": "Structure",
+   "compliance": false,
+   "rating": "auto",
+   "summary": "",
+   "items": [
+    {
+     "key": "horizontal",
+     "label": "Horizontal Structure (Slabs, Floors, Joists and Beams, and Roof Framing)",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "vertical",
+     "label": "Vertical Structure (Columns)",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    }
+   ]
+  },
+  {
+   "key": "int",
+   "title": "Interior",
+   "compliance": false,
+   "rating": "auto",
+   "summary": "",
+   "items": [
+    {
+     "key": "ceiling",
+     "label": "Ceiling",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "flooring",
+     "label": "Flooring",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "walls",
+     "label": "Walls",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "millwork",
+     "label": "Millwork",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "rooms",
+     "label": "Rooms",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "dining",
+     "label": "Dining / Food Prep",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "common",
+     "label": "Common Areas",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "elevators",
+     "label": "Elevators",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "special",
+     "label": "Special Areas",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    }
+   ]
+  },
+  {
+   "key": "mep",
+   "title": "MEP Systems",
+   "compliance": false,
+   "rating": "auto",
+   "summary": "",
+   "items": [
+    {
+     "key": "plumbing",
+     "label": "Plumbing",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "hvac",
+     "label": "HVAC",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "electrical",
+     "label": "Electrical",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    }
+   ]
+  },
+  {
+   "key": "reg",
+   "title": "Regulatory Compliance",
+   "compliance": true,
+   "rating": "auto",
+   "summary": "",
+   "items": [
+    {
+     "key": "life",
+     "label": "Life Safety",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "lic",
+     "label": "Building Licensing",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "agency",
+     "label": "Regulatory Agencies",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "ada",
+     "label": "ADA",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "elevlic",
+     "label": "Elevator Licensing",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "environmental",
+     "label": "Environmental",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "capital",
+     "label": "Capital Additions or Improvements",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "other",
+     "label": "Other",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    }
+   ]
+  },
+  {
+   "key": "site",
+   "title": "Site",
+   "compliance": false,
+   "rating": "auto",
+   "summary": "",
+   "items": [
+    {
+     "key": "paving",
+     "label": "Parking Surfaces",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "walks",
+     "label": "Sidewalks and Hardscapes",
+     "hidden": false,
+     "rating": "F",
+     "noMaterialIssues": false,
+     "notes": "Cracks near the entrance.",
+     "confirmed": false,
+     "findings": [
+      {
+       "id": "f-walks",
+       "description": "Sidewalk cracks near the main entrance.",
+       "location": "Main entrance",
+       "observationOnly": false,
+       "action": {
+        "title": "Repair sidewalk cracks",
+        "recommendation": "Some repair to sidewalk cracks would help prevent further damage.",
+        "priority": "REC"
+       }
+      }
+     ]
+    },
+    {
+     "key": "landscaping",
+     "label": "Landscaping",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    },
+    {
+     "key": "detention",
+     "label": "Water Detention Areas",
+     "hidden": false,
+     "rating": "",
+     "noMaterialIssues": false,
+     "notes": "",
+     "confirmed": false,
+     "findings": []
+    }
+   ]
+  }
+ ],
+ "photos": [
+  {
+   "id": "p1",
+   "asset": "file-v2-p1",
+   "original": "file-v2-p1-original",
+   "name": "IMG_106.jpg",
+   "takenAt": 1795600001000,
+   "lat": 33.5,
+   "lng": -86.8,
+   "w": 2048,
+   "h": 1536,
+   "caption": "Ponding on the north half",
+   "status": "report",
+   "item": "env.roof",
+   "findings": [
+    "f-ponding"
+   ],
+   "alsoIn": [],
+   "markup": [
+    {
+     "type": "circle",
+     "color": "#E8372C",
+     "x1": 0.3,
+     "y1": 0.3,
+     "x2": 0.6,
+     "y2": 0.6
+    }
+   ],
+   "addedAt": 1795604000000
+  },
+  {
+   "id": "p2",
+   "asset": "file-v2-p2",
+   "original": "file-v2-p2-original",
+   "name": "IMG_107.jpg",
+   "takenAt": 1795600002000,
+   "lat": 33.5,
+   "lng": -86.8,
+   "w": 2048,
+   "h": 1536,
+   "caption": "Entrance sidewalk",
+   "status": "report",
+   "item": "site.walks",
+   "findings": [
+    "f-walks"
+   ],
+   "alsoIn": [],
+   "markup": [],
+   "addedAt": 1795604000000
+  }
+ ],
+ "coverPhoto": "p1",
+ "status": "issued",
+ "revision": 0,
+ "history": [
+  {
+   "rev": 0,
+   "at": 1795607000000
+  }
+ ],
+ "createdAt": 1795600000000,
+ "updatedAt": 1795607200000,
+ "spellCheckedAt": 1795606000000,
+ "textEditedAt": 1795605000000,
+ "issuedAt": 1795607000000
+}

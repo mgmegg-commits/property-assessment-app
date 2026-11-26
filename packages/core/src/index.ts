@@ -32,5 +32,7 @@ export * from "./model/checks.js";
 export * from "./model/phrases.js";
 export * from "./model/versions.js";
 export * from "./model/settings.js";
+export { ASSESSMENT_MIGRATIONS, documentSchema, type DocumentMigration } from "./model/migrations.js";
+export * from "./model/transcripts.js";
 export * from "./util/format.js";
 export { uid, deepClone } from "./util/ids.js";

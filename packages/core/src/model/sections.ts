@@ -265,7 +265,9 @@ const appendText = (first: string | undefined, more: (string | undefined)[]): st
  * Combines two or more findings in one subsection into the first (in report
  * order): its title and text lead, the others' text is added below so nothing
  * is lost, places are listed together, and every photo moves to it, in order.
- * Keeps the most urgent priority and the earliest due date. Returns the kept finding.
+ * Keeps the most urgent priority. A v1 report's saved assignee and due date
+ * (v1FollowUp) combine as v1 combined them: the earliest due date, and the
+ * first assignee. Returns the kept finding.
  */
 export function mergeFindings(a: Assessment, findingIds: string[], priorityOrder: Record<string, number> = {}): Finding {
   const located = findingIds.map((id) => {
@@ -292,8 +294,11 @@ export function mergeFindings(a: Assessment, findingIds: string[], priorityOrder
     keep.action.recommendation = appendText(keep.action.recommendation, rest.map((f) => f.action.recommendation));
     const ranked = actions.filter((x) => x.priority).sort((x, y) => (priorityOrder[x.priority] ?? 9) - (priorityOrder[y.priority] ?? 9));
     keep.action.priority = ranked[0]?.priority || keep.action.priority;
-    keep.action.due = actions.map((x) => x.due).filter(Boolean).sort()[0] || "";
-    keep.action.assignee ||= actions.find((x) => x.assignee)?.assignee || "";
+    const saved = all.filter((f) => !f.observationOnly).map((f) => f.v1FollowUp || {});
+    const due = saved.map((x) => x.due).filter(Boolean).sort()[0];
+    const assignee = keep.v1FollowUp?.assignee || saved.find((x) => x.assignee)?.assignee;
+    if (due || assignee) keep.v1FollowUp = { ...(assignee ? { assignee } : {}), ...(due ? { due } : {}) };
+    else delete keep.v1FollowUp;
   }
 
   // Photos: the kept finding's first, then each other finding's, in their own order.

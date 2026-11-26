@@ -8,12 +8,17 @@ import { newAssessment, newFinding } from "@crb/core";
 import { runChecks } from "@crb/core";
 import { defaultSettings } from "@crb/core";
 
+// Changed in v2 (schema 7): due dates live on the action items, not in the report, so
+// listActions is given them by finding id. v1 put them on f.action.due.
+export const FOLLOW_UP = new Map();
+
 export function reportWithActions() {
   const a = newAssessment({ templateKey: "healthcare", propertyName: "The Arbors", date: "2026-11-03" });
   const add = (si, title, priority, due = "") => {
     const f = newFinding();
     Object.assign(f, { description: `${title}.` });
-    Object.assign(f.action, { title, priority, due });
+    Object.assign(f.action, { title, priority });
+    if (due) FOLLOW_UP.set(f.id, { due });
     a.sections[si].items[0].findings.push(f);
     return f;
   };
@@ -25,7 +30,8 @@ export function reportWithActions() {
 
 test("a new finding has no assignee or due date", () => {
   const f = newFinding();
-  assert.deepEqual([f.action.assignee, f.action.due], ["", ""]);
+  // Changed in v2 (schema 7): the report has no assignee or due date at all (v1: both "").
+  assert.deepEqual(["assignee" in f.action, "due" in f.action], [false, false]);
   assert.equal("defaultAssignee" in defaultSettings(), false, "the default-assignee setting is gone");
 });
 
@@ -39,7 +45,7 @@ test("Review doesn't ask for an assignee or due date", () => {
 /* ---------- Action list order ---------- */
 import { listActions, migrateAssessment, ACTION_ORDERS } from "@crb/core";
 
-const titles = (a) => listActions(a).map((x) => x.finding.action.title);
+const titles = (a) => listActions(a, FOLLOW_UP).map((x) => x.finding.action.title);
 
 test("the action list follows the report's chosen order, and so do the numbers", () => {
   const a = reportWithActions();
@@ -50,7 +56,7 @@ test("the action list follows the report's chosen order, and so do the numbers",
   assert.deepEqual(titles(a), ["Roof ponding", "Ceiling stains", "Asphalt seal coating"]);
   a.actionOrder = "due";
   assert.deepEqual(titles(a), ["Roof ponding", "Asphalt seal coating", "Ceiling stains"], "no due date (TBD) last");
-  assert.equal(listActions(a)[0].actionNumber, "A1");
+  assert.equal(listActions(a, FOLLOW_UP)[0].actionNumber, "A1");
 });
 
 // Deferred to step 2.9 (exports): "the Excel tracker and the CSV follow the same order" (needs export/tracker.js and export/files.js).

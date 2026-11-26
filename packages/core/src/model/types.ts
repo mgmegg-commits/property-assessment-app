@@ -1,13 +1,15 @@
 /**
  * The assessment document: the report Cecil edits, as one JSON document.
- * The shape is v1's (schema 6), described in v1 src/js/model/assessment.js.
+ * The shape is v1's (schema 6, described in v1 src/js/model/assessment.js)
+ * plus v2's schema 7: assignee and due date left the report (model/migrations.ts).
  *
  *   assessment.sections[]                     the report's own list, copied from the standard list when it
  *                                             was made; `key` never changes (model/sections.ts)
  *   assessment.sections[].items[]             subsections: `key`, `label`, `rating`, `notes`, `hidden`,
  *                                             `suggested` (added by a draft), `drafted` (values not yet accepted)
  *   assessment.sections[].items[].findings[]  each finding has an `action` (title, recommendation,
- *                                             priority, assignee, due) unless `observationOnly`
+ *                                             priority) unless `observationOnly`; who fixes it and by
+ *                                             when live on the action item, not in the report
  *   assessment.photos[]                       `item` (ref "sectionKey.itemKey"), `findings` (ids), `markup` (shapes),
  *                                             `alsoIn` (extra places: "item:<ref>" / "finding:<id>"),
  *                                             `overview` (a general property photo), `order` (position within its group)
@@ -28,9 +30,19 @@ export interface Action {
   recommendation: string;
   /** A code in the report's scheme: H / M / L or REQ / REC. Empty until chosen. */
   priority: string;
-  assignee: string;
-  due: string;
 }
+
+/**
+ * Who fixes an action item and by when ("YYYY-MM-DD"). Set by the client and
+ * facility on the live action item, never by the assessor.
+ */
+export interface FollowUp {
+  assignee?: string;
+  due?: string;
+}
+
+/** Follow-up for each finding, by finding id: the live action items' values. */
+export type FollowUpLookup = ReadonlyMap<string, FollowUp>;
 
 /** A transcript remark a drafted finding came from. */
 export interface Source {
@@ -49,6 +61,12 @@ export interface Finding {
   /** Made by a draft and not yet changed by Cecil. */
   drafted?: boolean;
   sources?: Source[];
+  /**
+   * An assignee or due date saved by v1, which kept them on the finding
+   * (schema 7 moved them here). Importing the report makes them the action
+   * item's starting values. Reports made in v2 never have one.
+   */
+  v1FollowUp?: FollowUp;
 }
 
 export interface DraftedMarks {
