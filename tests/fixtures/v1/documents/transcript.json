@@ -1,0 +1,29 @@
+{
+ "assessmentId": "a-fixture-v1",
+ "walkId": "w1",
+ "source": "Voice Memos",
+ "fileName": "Example walk.m4a",
+ "startedAt": 1793700100000,
+ "durationMs": 15000,
+ "segments": [
+  {
+   "id": "s1",
+   "start": 1,
+   "end": 4,
+   "text": "Roof has storm damage on the west side."
+  },
+  {
+   "id": "s2",
+   "start": 5,
+   "end": 9,
+   "text": "The pool deck is cracked all along the edge."
+  },
+  {
+   "id": "s3",
+   "start": 10,
+   "end": 14,
+   "text": "Parking lot looks good."
+  }
+ ],
+ "createdAt": 1793700200000
+}

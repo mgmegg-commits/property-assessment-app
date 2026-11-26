@@ -6,5 +6,5 @@
     "outDir": "dist",
     "types": []
   },
-  "include": ["src"]
+  "include": ["src", "src/**/*.json"]
 }

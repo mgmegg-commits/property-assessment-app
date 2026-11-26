@@ -1,0 +1,37 @@
+{
+  "schemes": {
+    "hml": {
+      "name": "High / Medium / Low",
+      "labels": {
+        "H": "High",
+        "M": "Medium",
+        "L": "Low"
+      }
+    },
+    "rr": {
+      "name": "Required / Recommended",
+      "labels": {
+        "REQ": "Required",
+        "REC": "Recommended"
+      }
+    }
+  },
+  "order": {
+    "H": 0,
+    "REQ": 0,
+    "M": 1,
+    "REC": 1,
+    "L": 2
+  },
+  "conversion": {
+    "rr": {
+      "H": "REQ",
+      "M": "REC",
+      "L": "REC"
+    },
+    "hml": {
+      "REQ": "H",
+      "REC": "M"
+    }
+  }
+}

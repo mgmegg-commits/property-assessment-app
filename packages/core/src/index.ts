@@ -1,7 +1,8 @@
 /**
  * @crb/core: pure code shared by the server and the web app. No database,
- * no web page. Step 2.2 ports v1's model here (assessment document,
- * templates, sections, priorities, checks, phrases, versions, migrations).
+ * no web page, no network: the report model ported from v1 (assessment
+ * document, templates, sections, priorities, checks, phrases, versions,
+ * migrations). See packages/core/README.md.
  */
 
 export const APP_ID = "cecils-report-builder";
@@ -21,3 +22,18 @@ export const organizationTypeLabel = (type: OrganizationType): string => ORGANIZ
 
 export const isOrganizationType = (value: unknown): value is OrganizationType =>
   typeof value === "string" && (ORGANIZATION_TYPES as readonly string[]).includes(value);
+
+/* ---------- The report model (ported from v1; see packages/core/README.md) ---------- */
+export type * from "./model/types.js";
+export * from "./model/templates.js";
+export * from "./model/assessment.js";
+export * from "./model/sections.js";
+export * from "./model/checks.js";
+export * from "./model/phrases.js";
+export * from "./model/versions.js";
+export * from "./model/settings.js";
+export { ASSESSMENT_MIGRATIONS, documentSchema, type DocumentMigration } from "./model/migrations.js";
+export * from "./model/transcripts.js";
+export * from "./model/tracker.js";
+export * from "./util/format.js";
+export { uid, deepClone } from "./util/ids.js";

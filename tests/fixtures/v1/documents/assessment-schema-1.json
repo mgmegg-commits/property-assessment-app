@@ -1,0 +1,607 @@
+{
+ "id": "a-fixture-schema-1",
+ "kind": "assessment",
+ "templateKey": "healthcare",
+ "templateName": "Healthcare Master",
+ "templateVersion": 2,
+ "propertyName": "Example Medical Office",
+ "clientName": "Example Owner LLC",
+ "versionDay": "2026-11-03",
+ "useType": "Medical office",
+ "operator": "Example Operator",
+ "address": "100 Example Ave, Birmingham, AL",
+ "lat": "33.452100",
+ "lng": "-86.801200",
+ "date": "2026-11-03",
+ "time": "09:00",
+ "preparedBy": "Cecil Ingram",
+ "weather": "Clear, 58 F",
+ "personnel": [
+  {
+   "name": "Pat Example",
+   "title": "Maintenance Director",
+   "org": "Example Operator"
+  }
+ ],
+ "parcels": [
+  {
+   "pid": "1234",
+   "address": "100 EXAMPLE AVE",
+   "desc": "ONE BUILDING"
+  }
+ ],
+ "generalComments": "Test report for the migration tests. Not a real property.",
+ "sections": [
+  {
+   "key": "env",
+   "title": "Building Envelope",
+   "compliance": false,
+   "rating": "auto",
+   "items": [
+    {
+     "key": "roof",
+     "label": "Roof",
+     "hidden": false,
+     "rating": "F",
+     "notes": "TPO membrane with patches at the west wing.",
+     "confirmed": false,
+     "issues": [
+      {
+       "id": "f-tpo",
+       "description": "TPO repairs were not made per manufacturer specifications.",
+       "location": "West wing; Building C",
+       "action": {
+        "title": "TPO repairs not per specs",
+        "recommendation": "TPO repairs should be per manufacturer specifications.",
+        "priority": "M",
+        "due": "2027-03-01",
+        "owner": "Facility maintenance"
+       },
+       "obsOnly": false
+      },
+      {
+       "id": "f-wear",
+       "description": "Minor wear at the walk pads.",
+       "location": "",
+       "action": {
+        "title": "",
+        "recommendation": "",
+        "priority": "",
+        "due": "",
+        "owner": ""
+       },
+       "obsOnly": true
+      }
+     ],
+     "nmi": false
+    },
+    {
+     "key": "elevations",
+     "label": "Elevations",
+     "hidden": true,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "openings",
+     "label": "Openings",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "sealants",
+     "label": "Sealant and Flashings",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    }
+   ],
+   "drafted": {
+    "summary": true
+   },
+   "narrative": "The envelope is in fair condition."
+  },
+  {
+   "key": "str",
+   "title": "Structure",
+   "compliance": false,
+   "rating": "G",
+   "items": [
+    {
+     "key": "horizontal",
+     "label": "Horizontal Structure (Slabs, Floors, Joists and Beams, and Roof Framing)",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "vertical",
+     "label": "Vertical Structure (Columns)",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    }
+   ],
+   "narrative": ""
+  },
+  {
+   "key": "int",
+   "title": "Interior",
+   "compliance": false,
+   "rating": "auto",
+   "items": [
+    {
+     "key": "ceiling",
+     "label": "Ceiling",
+     "hidden": false,
+     "rating": "F",
+     "notes": "",
+     "confirmed": false,
+     "issues": [
+      {
+       "id": "f-stains",
+       "description": "Stained ceiling tiles in the east corridor.",
+       "location": "East corridor",
+       "action": {
+        "title": "Replace stained ceiling tiles",
+        "recommendation": "Replace stained tiles after the leak is repaired.",
+        "priority": "L",
+        "due": "",
+        "owner": ""
+       },
+       "obsOnly": false
+      }
+     ],
+     "nmi": false
+    },
+    {
+     "key": "flooring",
+     "label": "Flooring",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "walls",
+     "label": "Walls",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "millwork",
+     "label": "Millwork",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "rooms",
+     "label": "Patient Rooms",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "dining",
+     "label": "Cafeteria",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "common",
+     "label": "Common Areas",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "elevators",
+     "label": "Elevators",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "special",
+     "label": "Treatment Areas",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    }
+   ],
+   "narrative": ""
+  },
+  {
+   "key": "mep",
+   "title": "MEP Systems",
+   "compliance": false,
+   "rating": "auto",
+   "items": [
+    {
+     "key": "plumbing",
+     "label": "Plumbing",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "hvac",
+     "label": "HVAC",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "electrical",
+     "label": "Electrical",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    }
+   ],
+   "narrative": ""
+  },
+  {
+   "key": "reg",
+   "title": "Regulatory Compliance",
+   "compliance": true,
+   "rating": "auto",
+   "items": [
+    {
+     "key": "life",
+     "label": "Life Safety",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": true,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "lic",
+     "label": "Hospital Licensing",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "agency",
+     "label": "TJC / DNV",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "ada",
+     "label": "ADA",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "elevlic",
+     "label": "Elevator Licensing",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "environmental",
+     "label": "Environmental",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "capital",
+     "label": "Capital Additions or Improvements",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "other",
+     "label": "Other",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    }
+   ],
+   "narrative": ""
+  },
+  {
+   "key": "site",
+   "title": "Site",
+   "compliance": false,
+   "rating": "auto",
+   "items": [
+    {
+     "key": "paving",
+     "label": "Parking Surfaces",
+     "hidden": false,
+     "rating": "G",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": true
+    },
+    {
+     "key": "walks",
+     "label": "Sidewalks and Hardscapes",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "landscaping",
+     "label": "Landscaping",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "detention",
+     "label": "Water Detention Areas",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "i-dumpster",
+     "label": "Dumpster Enclosure",
+     "hidden": false,
+     "rating": "",
+     "notes": "",
+     "confirmed": false,
+     "custom": true,
+     "issues": [],
+     "nmi": false
+    },
+    {
+     "key": "i-deck",
+     "label": "Pool Deck",
+     "hidden": false,
+     "rating": "F",
+     "notes": "Cracked along the edge.",
+     "confirmed": false,
+     "custom": true,
+     "drafted": {
+      "rating": true,
+      "notes": true
+     },
+     "addedByDraft": true,
+     "issues": [
+      {
+       "id": "f-deck",
+       "description": "The pool deck is cracked along the edge.",
+       "location": "",
+       "action": {
+        "title": "Repair pool deck",
+        "recommendation": "Repair the cracks.",
+        "priority": "H",
+        "due": "",
+        "owner": ""
+       },
+       "drafted": true,
+       "sources": [
+        {
+         "segmentId": "s2",
+         "start": 5,
+         "end": 9,
+         "text": "The pool deck is cracked all along the edge."
+        }
+       ],
+       "obsOnly": false
+      }
+     ],
+     "nmi": false
+    }
+   ],
+   "narrative": ""
+  }
+ ],
+ "photos": [
+  {
+   "id": "p1",
+   "asset": "file-p1",
+   "original": "file-p1-original",
+   "name": "IMG_100.jpg",
+   "sig": "IMG_100.jpg|60000|1793700000000",
+   "takenAt": 1793700100000,
+   "lat": 33.4521,
+   "lng": -86.8012,
+   "w": 1536,
+   "h": 2048,
+   "caption": "TPO patch at the west wing",
+   "status": "report",
+   "item": "env.roof",
+   "addedAt": 1793705000000,
+   "order": 0,
+   "issues": [
+    "f-tpo"
+   ]
+  },
+  {
+   "id": "p2",
+   "asset": "file-p2",
+   "original": "file-p2-original",
+   "name": "IMG_101.jpg",
+   "sig": "IMG_101.jpg|60000|1793700000000",
+   "takenAt": 1793700101000,
+   "lat": 33.4521,
+   "lng": -86.8012,
+   "w": 1536,
+   "h": 2048,
+   "caption": "Roof, looking west",
+   "status": "report",
+   "item": null,
+   "addedAt": 1793705000000,
+   "overview": true,
+   "issues": []
+  },
+  {
+   "id": "p3",
+   "asset": "file-p3",
+   "original": "file-p3-original",
+   "name": "IMG_102.jpg",
+   "sig": "IMG_102.jpg|60000|1793700000000",
+   "takenAt": 1793700102000,
+   "lat": 33.4521,
+   "lng": -86.8012,
+   "w": 1536,
+   "h": 2048,
+   "caption": "Ceiling stains below the roof leak",
+   "status": "report",
+   "item": "int.ceiling",
+   "addedAt": 1793705000000,
+   "issues": [
+    "f-stains"
+   ]
+  },
+  {
+   "id": "p4",
+   "asset": "file-p4",
+   "original": "file-p4-original",
+   "name": "IMG_103.jpg",
+   "sig": "IMG_103.jpg|60000|1793700000000",
+   "takenAt": 1793700103000,
+   "lat": 33.4521,
+   "lng": -86.8012,
+   "w": 1536,
+   "h": 2048,
+   "caption": "",
+   "status": "excluded",
+   "item": null,
+   "addedAt": 1793705000000,
+   "issues": []
+  },
+  {
+   "id": "p5",
+   "asset": "file-p5",
+   "original": "file-p5-original",
+   "name": "IMG_104.jpg",
+   "sig": "IMG_104.jpg|60000|1793700000000",
+   "takenAt": 1793700104000,
+   "lat": 33.4521,
+   "lng": -86.8012,
+   "w": 1536,
+   "h": 2048,
+   "caption": "Parking lot",
+   "status": "appendix",
+   "item": "site.paving",
+   "addedAt": 1793705000000,
+   "issues": []
+  },
+  {
+   "id": "p6",
+   "asset": "file-p6",
+   "original": "file-p6-original",
+   "name": "IMG_105.jpg",
+   "sig": "IMG_105.jpg|60000|1793700000000",
+   "takenAt": 1793700105000,
+   "lat": 33.4521,
+   "lng": -86.8012,
+   "w": 1536,
+   "h": 2048,
+   "caption": "Pool deck cracks",
+   "status": "report",
+   "item": "site.i-deck",
+   "addedAt": 1793705000000,
+   "walkId": "w1",
+   "offsetMs": 6000,
+   "issues": [
+    "f-deck"
+   ]
+  }
+ ],
+ "coverPhoto": "p2",
+ "status": "draft",
+ "revision": 0,
+ "history": [],
+ "createdAt": 1793700000000,
+ "updatedAt": 1793703600000,
+ "_by": "sfixture",
+ "spellCheckedAt": 1793703000000,
+ "textEditedAt": 1793702000000
+}
