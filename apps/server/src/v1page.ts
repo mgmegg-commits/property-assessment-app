@@ -7,6 +7,10 @@
  * Excel and photo libraries from cdnjs and jsDelivr and its fonts from Google
  * Fonts, so its content security policy allows exactly those: the inline
  * script by hash, inline styles, and those hosts.
+ *
+ * The one addition: a script tag before </body> for /app/v1-home-link.js,
+ * which puts a Follow-up button on v1's home page. The file itself is never
+ * changed.
  */
 import { createHash } from "node:crypto";
 import { readFileSync } from "node:fs";
@@ -22,8 +26,14 @@ export interface V1Version {
   bytes: number;
 }
 
+/** The script tag added to v1's page: the Follow-up button on its home page. */
+export const HOME_LINK_TAG = '<script src="/app/v1-home-link.js" defer></script>';
+
 export interface V1Page {
+  /** v1's page as served: the built file, plus HOME_LINK_TAG before </body>. */
   html: Buffer;
+  /** The built file, byte for byte. */
+  original: Buffer;
   version: V1Version;
   contentSecurityPolicy: string;
 }
@@ -57,11 +67,15 @@ export function v1ContentSecurityPolicy(html: string, extraScripts: string[] = [
 }
 
 export function loadV1Page(dir: string): V1Page {
-  const html = readFileSync(path.join(dir, "index.html"));
+  const original = readFileSync(path.join(dir, "index.html"));
   const version = JSON.parse(readFileSync(path.join(dir, "VERSION.json"), "utf8")) as V1Version;
-  const actual = sha256(html, "hex");
+  const actual = sha256(original, "hex");
   if (actual !== version.sha256) {
     throw new Error(`apps/v1-web/index.html doesn't match its VERSION.json (sha256 ${actual}, expected ${version.sha256}). Rebuild it with scripts/refresh-v1.sh.`);
   }
-  return { html, version, contentSecurityPolicy: v1ContentSecurityPolicy(html.toString("utf8")) };
+  const text = original.toString("utf8");
+  const end = text.lastIndexOf("</body>");
+  if (end < 0) throw new Error("apps/v1-web/index.html has no </body>.");
+  const html = Buffer.from(`${text.slice(0, end)}${HOME_LINK_TAG}\n${text.slice(end)}`, "utf8");
+  return { html, original, version, contentSecurityPolicy: v1ContentSecurityPolicy(text) };
 }

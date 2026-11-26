@@ -11,7 +11,7 @@ import { createPool, type Pool } from "../src/db.js";
 import { loadFixtures } from "../src/fixtures.js";
 import { migrate, readMigrations } from "../src/migrate.js";
 import { CONTENT_SECURITY_POLICY } from "../src/security.js";
-import { inlineScriptHashes, loadV1Page, type V1Page } from "../src/v1page.js";
+import { HOME_LINK_TAG, inlineScriptHashes, loadV1Page, type V1Page } from "../src/v1page.js";
 import { testConfig } from "./helpers.js";
 import { createTestDatabase, type TestDatabase } from "../../../tests/setup/test-database.js";
 
@@ -105,12 +105,14 @@ describe("v1's front end at /", () => {
   });
   afterAll(() => server.close());
 
-  it("is v1's built page, byte for byte, from the pinned commit", async () => {
+  it("is v1's built page from the pinned commit, with only the Follow-up button's script tag added", async () => {
     const response = await server.inject("/");
     expect(response.statusCode).toBe(200);
     expect(response.headers["content-type"]).toMatch(/text\/html/);
-    expect(response.rawPayload.equals(readFileSync(path.join(V1_WEB, "index.html")))).toBe(true);
-    expect(createHash("sha256").update(response.rawPayload).digest("hex")).toBe(v1Page.version.sha256);
+    const file = readFileSync(path.join(V1_WEB, "index.html"));
+    expect(createHash("sha256").update(file).digest("hex")).toBe(v1Page.version.sha256);
+    expect(response.body.replace(`${HOME_LINK_TAG}\n`, "")).toBe(file.toString("utf8"));
+    expect(response.body.indexOf(HOME_LINK_TAG)).toBe(response.body.lastIndexOf("</body>") - HOME_LINK_TAG.length - 1);
     expect(response.headers["cache-control"]).toBe("no-cache");
     expect((await server.inject("/index.html")).rawPayload.equals(response.rawPayload)).toBe(true);
   });

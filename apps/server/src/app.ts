@@ -26,8 +26,8 @@ import { Storage } from "./storage.js";
 import { IMAGE_TYPES, LIMITS, registerV1Api, type OnReportSaved } from "./v1api.js";
 import type { V1Page } from "./v1page.js";
 
-/** Pages the React app (apps/web) answers. */
-export const WEB_APP_PATHS = ["/status"];
+/** Pages the React app (apps/web) answers: the status page, the Follow-up page, and the phone page a personal link opens. */
+export const WEB_APP_PATHS = ["/status", "/follow-up", "/u"];
 
 export type AppConfig = Pick<Config, "env" | "webDist" | "password" | "sessionSecret" | "secureCookies" | "dataDir" | "draftModel" | "trainingExamples" | "claudeConfigured" | "publicUrl" | "timeZone">;
 

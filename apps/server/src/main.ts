@@ -12,6 +12,7 @@ import { FixtureError, loadFixtures } from "./fixtures.js";
 import { MigrationError, migrate, readMigrations } from "./migrate.js";
 import { appVersion } from "./version.js";
 import { loadV1Page } from "./v1page.js";
+import { followUpOptions } from "./followup.js";
 
 const log = (message: string) => console.log(JSON.stringify({ level: 30, time: Date.now(), msg: message }));
 
@@ -32,7 +33,7 @@ async function main(): Promise<void> {
   }
   if (!config.claudeConfigured) log("Drafting is off until ANTHROPIC_API_KEY is set; everything else works.");
 
-  const app = await buildApp({ config, pool, version, v1Page, logger: { level: config.logLevel } });
+  const app = await buildApp({ config, pool, version, v1Page, ...followUpOptions(config), logger: { level: config.logLevel } });
 
   let stopping = false;
   const stop = async (signal: string) => {
