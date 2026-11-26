@@ -56,6 +56,14 @@ export DEFAULT_SNI="${lan_ip:-localhost}"
 echo "Starting Cecil's Report Builder (the first time takes a few minutes)…"
 docker compose up -d --build --wait
 
+# Caddy can take a moment to answer after its container starts; wait for it.
+if command -v curl >/dev/null 2>&1; then
+  for _ in $(seq 1 30); do
+    curl --noproxy '*' --silent --fail --output /dev/null "http://localhost:${APP_PORT}/api/health" && break
+    sleep 1
+  done
+fi
+
 cat <<EOF
 
 Cecil's Report Builder is running, with test data.
