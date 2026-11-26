@@ -1,0 +1,411 @@
+{
+ "_by": "sfirstversion",
+ "address": "100 Example Ave",
+ "clientName": "Example Owner LLC",
+ "createdAt": 1795284882545,
+ "date": "2026-11-21",
+ "generalComments": "Saved by the first version of the app.",
+ "history": [],
+ "id": "av1fixture01",
+ "kind": "assessment",
+ "lat": "33",
+ "lng": "-86",
+ "operator": "Example Operator",
+ "parcels": [
+  {
+   "address": "100 EXAMPLE AVE",
+   "desc": "ONE BUILDING",
+   "pid": "1234"
+  }
+ ],
+ "personnel": [
+  {
+   "name": "Pat",
+   "org": "Example Operator",
+   "title": "Guide"
+  }
+ ],
+ "photos": [],
+ "preparedBy": "Cecil Ingram",
+ "propertyName": "First-version draft",
+ "revision": 0,
+ "sections": [
+  {
+   "compliance": false,
+   "items": [
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [
+      {
+       "id": "iold1",
+       "description": "Old-format finding",
+       "location": "",
+       "obsOnly": false,
+       "action": {
+        "title": "Fix it",
+        "recommendation": "",
+        "priority": "M",
+        "owner": "",
+        "due": ""
+       }
+      }
+     ],
+     "key": "roof",
+     "label": "Roof",
+     "nmi": false,
+     "notes": "",
+     "rating": "F"
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "walls",
+     "label": "Exterior Walls & Facade",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "windows",
+     "label": "Windows & Glazing",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "doors",
+     "label": "Exterior Doors & Entrances",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "sealants",
+     "label": "Sealants & Flashing",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "gutters",
+     "label": "Gutters & Downspouts",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    }
+   ],
+   "key": "env",
+   "narrative": "",
+   "rating": "auto",
+   "title": "Building Envelope"
+  },
+  {
+   "compliance": false,
+   "items": [
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "foundation",
+     "label": "Foundation",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "frame",
+     "label": "Framing & Superstructure",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "slabs",
+     "label": "Floors & Slabs",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    }
+   ],
+   "key": "str",
+   "narrative": "",
+   "rating": "auto",
+   "title": "Structure"
+  },
+  {
+   "compliance": false,
+   "items": [
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "common",
+     "label": "Common Areas & Corridors",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "rooms",
+     "label": "Rooms",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "dining",
+     "label": "Dining / Food Prep",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "special",
+     "label": "Special Areas",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "finishes",
+     "label": "Ceilings, Walls & Flooring",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    }
+   ],
+   "key": "int",
+   "narrative": "",
+   "rating": "auto",
+   "title": "Interior"
+  },
+  {
+   "compliance": false,
+   "items": [
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "hvac",
+     "label": "HVAC",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "plumbing",
+     "label": "Plumbing",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "electrical",
+     "label": "Electrical",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "fire",
+     "label": "Fire Protection & Alarm",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "elevators",
+     "label": "Elevators",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    }
+   ],
+   "key": "mep",
+   "narrative": "",
+   "rating": "auto",
+   "title": "MEP Systems"
+  },
+  {
+   "compliance": true,
+   "items": [
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "life",
+     "label": "Life Safety",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "ada",
+     "label": "ADA Accessibility",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "elevlic",
+     "label": "Elevator Licensing",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "lic",
+     "label": "Building Licensing",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "agency",
+     "label": "Regulatory Agencies",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "firemarshal",
+     "label": "Fire Marshal Inspection",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "health",
+     "label": "Health Department",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "environmental",
+     "label": "Environmental (Asbestos, Mold, Tanks)",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    }
+   ],
+   "key": "reg",
+   "narrative": "",
+   "rating": "auto",
+   "title": "Regulatory Compliance"
+  },
+  {
+   "compliance": false,
+   "items": [
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "paving",
+     "label": "Paving & Parking",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "walks",
+     "label": "Sidewalks, Curbs & Lighting",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    },
+    {
+     "confirmed": false,
+     "hidden": false,
+     "issues": [],
+     "key": "drainage",
+     "label": "Drainage & Landscaping",
+     "nmi": false,
+     "notes": "",
+     "rating": ""
+    }
+   ],
+   "key": "site",
+   "narrative": "",
+   "rating": "auto",
+   "title": "Site"
+  }
+ ],
+ "status": "draft",
+ "templateKey": "realestate",
+ "templateName": "Real Estate",
+ "templateVersion": 1,
+ "textEditedAt": 1795285144827,
+ "time": "14:17",
+ "updatedAt": 1795285144827,
+ "useType": "Independent Living",
+ "weather": "Sunny and dry."
+}

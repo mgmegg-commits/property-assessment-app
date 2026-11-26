@@ -159,6 +159,7 @@ Add a row after every meeting with Cecil; this table is the source of truth for 
 
 | Date | Decision |
 | --- | --- |
+| Nov 25, 2026 | Drafting uses Cecil's own Anthropic account in his copy and the client's own account in a client copy; Cecil's key in a client copy only with the client's written OK. Until Cecil's copy goes live, real drafting tests on Michael's Mac use Michael's own API key |
 | Nov 25, 2026 | Plan approved (`docs/plan.md`); details and reasons in `docs/decisions.md` |
 | Nov 25, 2026 | Hosting: build once, install anywhere. One package keeps each organization's data separate; a client gets its own organization in Cecil's copy or the same package on its own server. Hosting details to confirm with Cecil's IT contact before Milestone 4 |
 | Nov 25, 2026 | No staging server for now; the package runs on Michael's Mac with one command and fixture data. Hosting for Cecil's real copy is chosen before he uses v2 for real |
@@ -197,7 +198,7 @@ Add a row after every meeting with Cecil; this table is the source of truth for 
 - [ ] What are the action item statuses, and who can mark an item done? Provisional: Open, Assigned, In progress, Done, Deferred (see Decisions log). Confirm with Cecil.
 - [x] What does "issued" mean now: a locked report with live items (proposed), or something else? Decided Nov 25: as proposed.
 - [x] Email reminders for overdue items, or on-screen flags only? Decided Nov 25: on-screen flags; an opt-in weekly digest later.
-- [ ] Whose Claude account does drafting use in each client's copy? Recommended: Cecil's own account for his copy; the client's own account (Anthropic, or their Bedrock, Vertex or Foundry) for theirs (plan 12.20). Needed before step 2.8.
+- [x] Whose Claude account does drafting use in each client's copy? Decided Nov 25: Cecil's own Anthropic account for his copy; the client's own account (Anthropic, or their Bedrock, Vertex or Foundry) in a client copy; Cecil's key in a client copy only with the client's written OK.
 - [ ] Should a section's rating stay the average of its subsections, or take the worst one? Provisional: the average. Confirm with Cecil.
 - [x] Add Immediate / Short-term / Long-term as a third priority scheme? Decided Nov 25: not for now.
 - [ ] Who owns Cecil's questionnaires and phrases if the app is sold to others, and on what terms? Provisional: they belong to Cecil's firm, as a licensed pack. Terms go to a lawyer.

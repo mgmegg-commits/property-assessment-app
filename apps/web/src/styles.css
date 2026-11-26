@@ -1,0 +1,75 @@
+/* Colors, type and spacing from v1's styles.css (the look Cecil approved). Screens add their own styles as they're ported. */
+:root {
+  --paper: #F3F5F6; --surface: #FFFFFF; --sunk: #E9EDF0; --ink: #17212B; --muted: #586674; --line: #D6DDE3;
+  --accent: #1F4B6E; --accent-ink: #FFFFFF; --accent-soft: #E1EAF2;
+  --good: #2D7A4C; --fair: #A1650C; --poor: #B2392D; --na: #7A8794;
+  --good-soft: #E2F1E8; --fair-soft: #F7ECD9; --poor-soft: #F7E1DE;
+  --sel: #2F7DD1;
+  --f-display: "Archivo", "Arial Narrow", Arial, sans-serif;
+  --f-body: "IBM Plex Sans", -apple-system, "Segoe UI", Roboto, sans-serif;
+  --f-mono: "IBM Plex Mono", ui-monospace, Menlo, Consolas, monospace;
+  --r: 6px;
+  color-scheme: light;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --paper: #0E141A; --surface: #161F27; --sunk: #1C2731; --ink: #E4EBF0; --muted: #97A5B2; --line: #2A3846;
+    --accent: #86B6DE; --accent-ink: #0C1824; --accent-soft: #1B3245;
+    --good: #5DC08A; --fair: #E3A64A; --poor: #F17C6E; --na: #8E9BA7;
+    --good-soft: #173326; --fair-soft: #3A2B12; --poor-soft: #3D1D19; --sel: #6AAEF5;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --paper: #0E141A; --surface: #161F27; --sunk: #1C2731; --ink: #E4EBF0; --muted: #97A5B2; --line: #2A3846;
+  --accent: #86B6DE; --accent-ink: #0C1824; --accent-soft: #1B3245;
+  --good: #5DC08A; --fair: #E3A64A; --poor: #F17C6E; --na: #8E9BA7;
+  --good-soft: #173326; --fair-soft: #3A2B12; --poor-soft: #3D1D19; --sel: #6AAEF5;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body { margin: 0; background: var(--paper); color: var(--ink); font-family: var(--f-body); font-size: 16px; line-height: 1.45; }
+h1, h2, h3 { font-family: var(--f-display); font-stretch: 85%; text-wrap: balance; margin: 0; letter-spacing: -.005em; }
+h1 { font-size: 1.6rem; font-weight: 750; }
+h2 { font-size: 1.25rem; font-weight: 700; }
+a { color: var(--accent); }
+:focus-visible { outline: 2px solid var(--sel); outline-offset: 2px; }
+
+.wrap {
+  max-width: 1240px; margin: 0 auto;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.muted { color: var(--muted); }
+.small { font-size: .875rem; }
+.eyebrow { margin: 0 0 4px; font-size: .75rem; letter-spacing: .09em; text-transform: uppercase; color: var(--muted); font-weight: 600; }
+
+/* Header */
+.top { background: var(--surface); border-bottom: 1px solid var(--line); padding-top: env(safe-area-inset-top, 0px); }
+.top-row { display: flex; align-items: center; gap: 10px; min-height: 56px; }
+.brand { font-family: var(--f-display); font-stretch: 80%; font-weight: 750; font-size: 1.15rem; letter-spacing: .01em; }
+.badge { margin-left: auto; font-size: .75rem; font-weight: 600; padding: 3px 9px; border-radius: 999px; background: var(--fair-soft); color: var(--fair); }
+
+/* Page */
+.page { display: grid; gap: 16px; padding-top: 20px; padding-bottom: max(24px, env(safe-area-inset-bottom, 0px)); }
+.card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--r); padding: 18px 16px; display: grid; gap: 12px; min-width: 0; }
+.card > p { margin: 0; }
+
+/* Status */
+.status-list, .org-list { list-style: none; margin: 0; padding: 0; display: grid; }
+.status-row { display: grid; grid-template-columns: 14px auto 1fr; align-items: center; gap: 10px; min-height: 44px; border-top: 1px solid var(--line); }
+.status-row:first-child { border-top: 0; }
+.status-label { font-weight: 600; }
+.status-value { justify-self: end; text-align: right; color: var(--muted); }
+.dot { width: 12px; height: 12px; border-radius: 50%; background: var(--na); }
+.status-row[data-state="ok"] .dot { background: var(--good); }
+.status-row[data-state="ok"] .status-value { color: var(--good); }
+.status-row[data-state="bad"] .dot { background: var(--poor); }
+.status-row[data-state="bad"] .status-value { color: var(--poor); }
+
+.org-list li { display: flex; flex-wrap: wrap; justify-content: space-between; gap: 4px 12px; padding: 10px 0; border-top: 1px solid var(--line); }
+.org-list li:first-child { border-top: 0; }
+.org-name { font-weight: 600; overflow-wrap: anywhere; }
+.org-type { color: var(--muted); }
