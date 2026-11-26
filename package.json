@@ -20,7 +20,7 @@
     "test:all": "npm run lint && npm run check && npm test && npm run test:v1-server && npm run test:e2e",
     "dev:server": "tsx watch --conditions=source apps/server/src/main.ts",
     "dev:web": "vite apps/web",
-    "test:v1-server": "npm run build && node --test tests/v1-server/tests/"
+    "test:v1-server": "npm run build && node --test tests/v1-server/tests/server.test.mjs"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",

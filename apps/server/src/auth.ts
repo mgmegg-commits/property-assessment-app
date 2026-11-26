@@ -45,17 +45,21 @@ export function createAuth(config: AuthConfig) {
     return Number(expires) > Date.now() && safeEqual(signature, sign(config.sessionSecret, expires));
   }
 
-  function tooManyAttempts(ip: string): boolean {
+  /** Wrong passwords from this address in the last minute. (Signing in correctly doesn't count.) */
+  function recentFailures(ip: string): number[] {
     const now = Date.now();
     const recent = (attempts.get(ip) || []).filter((t) => now - t < 60_000);
-    recent.push(now);
     attempts.set(ip, recent);
-    return recent.length > MAX_ATTEMPTS_PER_MINUTE;
+    return recent;
   }
 
   function login(request: FastifyRequest, reply: FastifyReply, password: unknown): void {
-    if (tooManyAttempts(request.ip)) throw new TooManyAttempts("Too many attempts. Wait a minute and try again.");
-    if (typeof password !== "string" || !safeEqual(password, config.password)) throw new WrongPassword("That password isn't right.");
+    const failures = recentFailures(request.ip);
+    if (failures.length >= MAX_ATTEMPTS_PER_MINUTE) throw new TooManyAttempts("Too many attempts. Wait a minute and try again.");
+    if (typeof password !== "string" || !safeEqual(password, config.password)) {
+      failures.push(Date.now());
+      throw new WrongPassword("That password isn't right.");
+    }
     const expires = String(Date.now() + SESSION_DAYS * 86_400_000);
     const cookie = [`${SESSION_COOKIE}=${expires}.${sign(config.sessionSecret, expires)}`, "Path=/", "HttpOnly", "SameSite=Lax",
       `Max-Age=${SESSION_DAYS * 86_400}`, config.secureCookies ? "Secure" : ""].filter(Boolean).join("; ");

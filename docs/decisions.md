@@ -6,6 +6,7 @@ Decisions agreed with Cecil live in the Decisions log in `docs/spec.md`. This fi
 
 | Date | Decision | Why |
 | --- | --- | --- |
+| Nov 26, 2026 | **Only wrong passwords count toward the sign-in limit** (10 a minute from one address, then a one-minute wait). v1 counted every attempt, right or wrong. | A shared office address, or the automated tests, signing in correctly many times shouldn't lock anyone out. Guessing is still limited exactly as before. |
 | Nov 26, 2026 | **The Follow-up and phone pages use v1's fonts (Archivo, IBM Plex Sans) served by the app itself** (`@fontsource` packages), not from Google Fonts. | Those pages keep the strict "the app's own files only" policy, and a phone on a weak signal doesn't wait on another site |
 | Nov 26, 2026 | **Until Branding & settings is saved, the follow-up pages use v1's own defaults:** the company "Cecil Ingram Properties LLC", and the latest issued report's "Prepared by" as the suggested name. | v1's page does the same, so both show the same names |
 | Nov 26, 2026 | **Each item's position is its place in the report's action list** (A1 first). The Follow-up page, the phone page and the export all list items in that order. | The order Cecil chose for the report (report, priority or due date) carries into follow-up |

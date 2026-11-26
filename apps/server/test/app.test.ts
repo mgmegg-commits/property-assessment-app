@@ -187,6 +187,13 @@ describe("the web app", () => {
     }
   });
 
+  it("answers errors in words, with the right status, when the web app is there too", async () => {
+    const response = await server.inject({ method: "POST", url: "/api/login", payload: { password: "wrong" } });
+    expect(response.statusCode).toBe(401);
+    expect(response.json()).toEqual({ error: "That password isn't right." });
+    expect((await server.inject({ method: "PUT", url: "/api/assessments/x" })).json()).toEqual({ error: "Sign in first." });
+  });
+
   it("still serves the API when the web app hasn't been built", async () => {
     const apiOnly = await app("production", { webDist: path.join(webDist, "missing") });
     expect((await apiOnly.inject("/api/health")).statusCode).toBe(200);

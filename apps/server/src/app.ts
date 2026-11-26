@@ -76,6 +76,19 @@ export async function buildApp({ config, pool, version, v1Page = null, claude = 
   const app = Fastify({ logger, trustProxy: true, bodyLimit: LIMITS.json });
   addSecurityHeaders(app);
 
+  // Set first: Fastify gives each route the error handler in place when it's registered.
+  app.setErrorHandler(async (error: Error & { statusCode?: number; code?: string }, request, reply) => {
+    let status = error.statusCode && error.statusCode >= 400 ? error.statusCode : 500;
+    let message = error.message;
+    if (error instanceof TooManyAttempts) status = 429;
+    if (error instanceof WrongPassword) status = 401;
+    if (status === 415) message = "Only JPEG, PNG and WebP images can be stored.";
+    if (status === 413) message = `Upload is larger than ${Math.round((request.url === "/api/files" ? LIMITS.file : LIMITS.json) / 1_048_576)} MB.`;
+    if (status >= 500) request.log.error({ err: error }, "Request failed");
+    return reply.code(status).send({ error: status >= 500 ? "Something went wrong on the website." : message });
+  });
+
+
   // v1's page sends "content-type: application/json" with no body on some calls (sign-out, start a draft).
   app.removeContentTypeParser("application/json");
   app.addContentTypeParser("application/json", { parseAs: "string" }, (_request, body, done) => {
@@ -160,17 +173,6 @@ export async function buildApp({ config, pool, version, v1Page = null, claude = 
       return reply.header("cache-control", "no-cache").sendFile("index.html");
     }
     return reply.code(404).send({ error: "Not found." });
-  });
-
-  app.setErrorHandler(async (error: Error & { statusCode?: number; code?: string }, request, reply) => {
-    let status = error.statusCode && error.statusCode >= 400 ? error.statusCode : 500;
-    let message = error.message;
-    if (error instanceof TooManyAttempts) status = 429;
-    if (error instanceof WrongPassword) status = 401;
-    if (status === 415) message = "Only JPEG, PNG and WebP images can be stored.";
-    if (status === 413) message = `Upload is larger than ${Math.round((request.url === "/api/files" ? LIMITS.file : LIMITS.json) / 1_048_576)} MB.`;
-    if (status >= 500) request.log.error({ err: error }, "Request failed");
-    return reply.code(status).send({ error: status >= 500 ? "Something went wrong on the website." : message });
   });
 
   return app;

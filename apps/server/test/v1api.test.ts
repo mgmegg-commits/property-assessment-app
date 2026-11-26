@@ -66,6 +66,17 @@ describe("signing in", () => {
     expect(response.json()).toEqual({ error: "That password isn't right." });
   });
 
+  it("ten wrong passwords in a minute lock that address out for a minute; signing in correctly doesn't count", async () => {
+    const other = await buildApp({ config: testConfig(), pool, version: "t" });
+    const login = (password: string) => other.inject({ method: "POST", url: "/api/login", payload: { password }, remoteAddress: "10.0.0.9" });
+    for (let i = 0; i < 15; i++) expect((await login(PASSWORD)).statusCode).toBe(200);
+    for (let i = 0; i < 10; i++) expect((await login("wrong")).statusCode).toBe(401);
+    const locked = await login(PASSWORD);
+    expect(locked.statusCode).toBe(429);
+    expect(locked.json()).toEqual({ error: "Too many attempts. Wait a minute and try again." });
+    await other.close();
+  });
+
   it("the cookie is v1's: HttpOnly, SameSite=Lax, 30 days", async () => {
     const response = await app.inject({ method: "POST", url: "/api/login", payload: { password: PASSWORD } });
     expect(response.headers["set-cookie"]).toMatch(/^crb_session=\d+\.[\w-]+; Path=\/; HttpOnly; SameSite=Lax; Max-Age=2592000$/);
