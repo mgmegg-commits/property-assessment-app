@@ -134,7 +134,7 @@ describe("sections", () => {
 
 describe("the pre-issue checks", () => {
   const ready = () => {
-    const a = newAssessment({ templateKey: "healthcare", propertyName: "The Arbors", clientName: "Example Owner LLC", preparedBy: "Cecil Ingram" });
+    const a = newAssessment({ templateKey: "healthcare", propertyName: "Example Medical Office", clientName: "Example Owner LLC", preparedBy: "Cecil Ingram" });
     Object.assign(a, { address: "100 Example Ave", generalComments: "Overall fair.", spellCheckedAt: 2 });
     return a;
   };
