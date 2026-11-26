@@ -1,0 +1,292 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Follow-up prototype</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@75..100,500..800&amp;family=IBM+Plex+Sans:wght@400;500;600&amp;display=swap">
+<style>
+body{margin:0}
+a{color:#1F4B6E}a:hover{color:#17212B}
+</style>
+</helmet>
+<div style="width: 1440px; height: 980px; box-sizing: border-box; padding: 40px; display: flex; gap: 48px; align-items: flex-start; background: #F3F5F6; color: #17212B; font-family: 'IBM Plex Sans', -apple-system, sans-serif; font-size: 14px; line-height: 1.45">
+
+  <!-- Desktop: the Follow-up page -->
+  <section aria-label="Follow-up page on a desktop" style="width: 940px; flex: none; background: #FFFFFF; border: 1px solid #D6DDE3; border-radius: 12px; overflow: hidden; display: flex; flex-direction: column">
+    <div style="display: flex; align-items: center; gap: 12px; padding: 12px 24px; border-bottom: 1px solid #D6DDE3">
+      <div aria-hidden="true" style="width: 28px; height: 28px; border-radius: 6px; background: #1F4B6E; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: Archivo, sans-serif; font-weight: 800; font-size: 11px">CIP</div>
+      <span style="font-family: Archivo, sans-serif; font-stretch: 85%; font-weight: 750; font-size: 17px">Cecil's Report Builder</span>
+      <nav aria-label="Main" style="display: flex; gap: 4px; margin-left: 24px">
+        <a href="#reports" style="padding: 10px 14px; color: #586674; text-decoration: none; font-weight: 600">Reports</a>
+        <a href="#follow-up" aria-current="page" style="padding: 10px 14px; color: #17212B; text-decoration: none; font-weight: 600; border-bottom: 3px solid #1F4B6E">Follow-up</a>
+      </nav>
+    </div>
+
+    <div style="padding: 24px; display: flex; flex-direction: column; gap: 18px">
+      <div style="display: flex; align-items: flex-end; gap: 16px; flex-wrap: wrap">
+        <div style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 4px">
+          <h1 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 85%; font-size: 28px; font-weight: 750">Follow-up</h1>
+          <p style="margin: 0; color: #586674">Pine Grove Cottages · report issued Nov 3, 2026 · 6 action items</p>
+        </div>
+        <button type="button" onClick="{{ exportExcel }}" style="min-height: 44px; padding: 0 16px; border: 1px solid #D6DDE3; border-radius: 6px; background: #FFFFFF; color: #17212B; font: inherit; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 8px">
+          <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v12"/><path d="M7 10l5 5 5-5"/><path d="M5 21h14"/></svg>
+          {{ exportLabel }}
+        </button>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 12px">
+        <div style="border: 1px solid #D6DDE3; border-radius: 8px; padding: 10px 14px"><div style="font-family: Archivo, sans-serif; font-size: 28px; font-weight: 700">{{ counts.open }}</div><div style="color: #586674; font-weight: 600; font-size: 13px">Open</div></div>
+        <div style="border: 1px solid #D6DDE3; border-radius: 8px; padding: 10px 14px"><div style="font-family: Archivo, sans-serif; font-size: 28px; font-weight: 700; color: #7A4A05">{{ counts.progress }}</div><div style="color: #586674; font-weight: 600; font-size: 13px">In progress</div></div>
+        <div style="border: 1px solid #D6DDE3; border-radius: 8px; padding: 10px 14px"><div style="font-family: Archivo, sans-serif; font-size: 28px; font-weight: 700; color: #22603B">{{ counts.done }}</div><div style="color: #586674; font-weight: 600; font-size: 13px">Done</div></div>
+        <div style="border: 1px solid #F0C4BE; background: #FBEDEB; border-radius: 8px; padding: 10px 14px"><div style="font-family: Archivo, sans-serif; font-size: 28px; font-weight: 700; color: #8F2A20">{{ counts.overdue }}</div><div style="color: #8F2A20; font-weight: 600; font-size: 13px">Overdue</div></div>
+      </div>
+
+      <div role="group" aria-label="Show" style="display: flex; gap: 8px; flex-wrap: wrap">
+        <sc-for list="{{ filters }}" as="f" hint-placeholder-count="5">
+          <button type="button" onClick="{{ f.pick }}" aria-pressed="{{ f.on }}" style="{{ f.style }}">{{ f.label }} · {{ f.n }}</button>
+        </sc-for>
+      </div>
+
+      <div style="border: 1px solid #D6DDE3; border-radius: 8px; overflow: hidden">
+        <div style="display: grid; grid-template-columns: 28px minmax(0, 2.6fr) 116px minmax(0, 1.2fr) 112px 112px minmax(0, 1.5fr); gap: 12px; padding: 10px 14px; background: #E9EDF0; font-size: 12px; font-weight: 600; letter-spacing: .04em; color: #586674">
+          <span>No.</span><span>Action item</span><span>Priority</span><span>Assigned to</span><span>Due</span><span>Status</span><span>Last update</span>
+        </div>
+        <sc-for list="{{ rows }}" as="r" hint-placeholder-count="6">
+          <div style="display: grid; grid-template-columns: 28px minmax(0, 2.6fr) 116px minmax(0, 1.2fr) 112px 112px minmax(0, 1.5fr); gap: 12px; padding: 12px 14px; border-top: 1px solid #D6DDE3; align-items: start">
+            <span style="color: #586674; font-family: 'IBM Plex Mono', monospace; font-size: 13px">{{ r.no }}</span>
+            <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0"><span style="font-weight: 600">{{ r.title }}</span><span style="color: #586674; font-size: 13px">{{ r.loc }}</span></span>
+            <span><span style="{{ r.prioStyle }}">{{ r.prioLabel }}</span></span>
+            <span>{{ r.assignee }}</span>
+            <span style="display: flex; flex-direction: column; gap: 2px"><span>{{ r.due }}</span><sc-if value="{{ r.overdue }}" hint-placeholder-val="{{ false }}"><span style="color: #8F2A20; font-weight: 600; font-size: 12px">Overdue</span></sc-if></span>
+            <span><span style="{{ r.statusStyle }}">{{ r.statusLabel }}</span></span>
+            <span style="color: #586674; font-size: 13px">{{ r.last }}</span>
+          </div>
+        </sc-for>
+        <sc-if value="{{ noRows }}" hint-placeholder-val="{{ false }}">
+          <p style="margin: 0; padding: 20px; color: #586674; border-top: 1px solid #D6DDE3">No items in this view.</p>
+        </sc-if>
+      </div>
+
+      <div style="display: flex; flex-direction: column; gap: 10px; border: 1px solid #D6DDE3; border-radius: 8px; padding: 14px 16px">
+        <div style="display: flex; align-items: center; gap: 12px; flex-wrap: wrap">
+          <div style="flex: 1; min-width: 0">
+            <h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 85%; font-size: 18px; font-weight: 700">Update links</h2>
+            <p style="margin: 2px 0 0; color: #586674; font-size: 13px">Each person gets their own link. They see only this property's items, and every update shows their name and the time.</p>
+          </div>
+          <button type="button" onClick="{{ addLink }}" style="min-height: 44px; padding: 0 14px; border: 1px dashed #1F4B6E; border-radius: 6px; background: #FFFFFF; color: #1F4B6E; font: inherit; font-weight: 600; cursor: pointer">+ New link</button>
+        </div>
+        <sc-for list="{{ links }}" as="l" hint-placeholder-count="1">
+          <div style="display: flex; align-items: center; gap: 12px; padding-top: 10px; border-top: 1px solid #E9EDF0; flex-wrap: wrap">
+            <div style="flex: 1; min-width: 0"><span style="font-weight: 600">{{ l.name }}</span> <span style="color: #586674">· {{ l.role }}</span></div>
+            <span style="{{ l.stateStyle }}">{{ l.stateLabel }}</span>
+            <button type="button" onClick="{{ l.copy }}" style="min-height: 40px; padding: 0 12px; border: 1px solid #D6DDE3; border-radius: 6px; background: #FFFFFF; color: #17212B; font: inherit; font-weight: 600; cursor: pointer">{{ l.copyLabel }}</button>
+            <button type="button" onClick="{{ l.toggle }}" style="min-height: 40px; padding: 0 12px; border: 1px solid #D6DDE3; border-radius: 6px; background: #FFFFFF; color: #8F2A20; font: inherit; font-weight: 600; cursor: pointer">{{ l.toggleLabel }}</button>
+          </div>
+        </sc-for>
+      </div>
+    </div>
+  </section>
+
+  <!-- Phone: the personal update link -->
+  <div style="display: flex; flex-direction: column; gap: 12px; align-items: center">
+    <p style="margin: 0; color: #586674; font-size: 13px; font-weight: 600">What {{ phoneName }} sees on a phone</p>
+    <section aria-label="Personal update link on a phone" style="width: 390px; height: 820px; flex: none; box-sizing: border-box; border: 10px solid #17212B; border-radius: 44px; background: #F3F5F6; overflow: hidden; display: flex; flex-direction: column">
+      <div style="padding: 20px 18px 12px; background: #FFFFFF; border-bottom: 1px solid #D6DDE3; display: flex; align-items: center; gap: 10px">
+        <div aria-hidden="true" style="width: 26px; height: 26px; border-radius: 6px; background: #1F4B6E; color: #FFFFFF; display: flex; align-items: center; justify-content: center; font-family: Archivo, sans-serif; font-weight: 800; font-size: 10px">CIP</div>
+        <span style="font-weight: 600; font-size: 13px">Cecil Ingram Properties</span>
+      </div>
+
+      <div style="flex: 1; overflow-y: auto; padding: 16px; display: flex; flex-direction: column; gap: 12px">
+        <sc-if value="{{ phoneOff }}" hint-placeholder-val="{{ false }}">
+          <div style="margin-top: 40px; display: flex; flex-direction: column; gap: 8px; text-align: center; padding: 20px; background: #FFFFFF; border: 1px solid #D6DDE3; border-radius: 12px">
+            <h2 style="margin: 0; font-family: Archivo, sans-serif; font-size: 20px">This link has been turned off</h2>
+            <p style="margin: 0; color: #586674">Ask Cecil Ingram Properties for a new link if you still need to send updates.</p>
+          </div>
+        </sc-if>
+
+        <sc-if value="{{ phoneList }}" hint-placeholder-val="{{ true }}">
+          <div style="display: flex; flex-direction: column; gap: 2px">
+            <span style="color: #586674; font-size: 13px">Pine Grove Cottages</span>
+            <h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 85%; font-size: 26px; font-weight: 750">Hi {{ phoneFirst }}</h2>
+            <span style="color: #586674">{{ phoneOpenCount }} items still need an update</span>
+          </div>
+          <sc-if value="{{ saved }}" hint-placeholder-val="{{ false }}">
+            <p role="status" style="margin: 0; padding: 10px 12px; border-radius: 8px; background: #E2F1E8; color: #22603B; font-weight: 600">Thanks, your update was saved.</p>
+          </sc-if>
+          <sc-for list="{{ phoneItems }}" as="p" hint-placeholder-count="5">
+            <button type="button" onClick="{{ p.open }}" style="text-align: left; font: inherit; color: #17212B; background: #FFFFFF; border: 1px solid #D6DDE3; border-radius: 12px; padding: 14px; display: flex; flex-direction: column; gap: 6px; cursor: pointer; min-height: 44px">
+              <span style="font-weight: 600; font-size: 15px">{{ p.title }}</span>
+              <span style="color: #586674; font-size: 13px">{{ p.loc }}</span>
+              <span style="display: flex; gap: 8px; align-items: center; flex-wrap: wrap"><span style="{{ p.statusStyle }}">{{ p.statusLabel }}</span><span style="{{ p.dueStyle }}">{{ p.dueText }}</span></span>
+            </button>
+          </sc-for>
+        </sc-if>
+
+        <sc-if value="{{ phoneDetail }}" hint-placeholder-val="{{ false }}">
+          <button type="button" onClick="{{ d.back }}" style="align-self: flex-start; min-height: 44px; padding: 0 12px 0 6px; border: 1px solid #1F4B6E; border-radius: 6px; background: #FFFFFF; color: #1F4B6E; font: inherit; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px">
+            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            All items
+          </button>
+          <div style="display: flex; flex-direction: column; gap: 6px">
+            <h2 style="margin: 0; font-family: Archivo, sans-serif; font-stretch: 85%; font-size: 22px; font-weight: 750">{{ d.title }}</h2>
+            <span style="color: #586674">{{ d.loc }}</span>
+            <span style="display: flex; gap: 8px; flex-wrap: wrap"><span style="{{ d.prioStyle }}">{{ d.prioLabel }}</span><span style="{{ d.statusStyle }}">{{ d.statusLabel }}</span><span style="{{ d.dueStyle }}">{{ d.dueText }}</span></span>
+          </div>
+          <div aria-hidden="true" style="height: 120px; border-radius: 10px; background: #E9EDF0; display: flex; align-items: center; justify-content: center; color: #586674; font-size: 13px">Photo from the Nov 3 visit</div>
+          <p style="margin: 0">{{ d.rec }}</p>
+
+          <div style="display: flex; flex-direction: column; gap: 10px; padding: 14px; background: #FFFFFF; border: 1px solid #D6DDE3; border-radius: 12px">
+            <span style="font-weight: 600">Your update</span>
+            <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px">
+              <button type="button" onClick="{{ d.pickProgress }}" aria-pressed="{{ d.progressOn }}" style="{{ d.progressStyle }}">In progress</button>
+              <button type="button" onClick="{{ d.pickDone }}" aria-pressed="{{ d.doneOn }}" style="{{ d.doneStyle }}">Done</button>
+            </div>
+            <label for="note" style="font-size: 13px; color: #586674; font-weight: 600">Note (optional)</label>
+            <textarea id="note" value="{{ d.note }}" onChange="{{ d.setNote }}" rows="3" placeholder="What was done, or what's still needed" style="font: inherit; padding: 10px; border: 1px solid #D6DDE3; border-radius: 8px; resize: vertical"></textarea>
+            <button type="button" onClick="{{ d.togglePhoto }}" style="min-height: 44px; border: 1px dashed #586674; border-radius: 8px; background: #FFFFFF; color: #17212B; font: inherit; font-weight: 600; cursor: pointer">{{ d.photoLabel }}</button>
+            <button type="button" onClick="{{ d.save }}" disabled="{{ d.cantSave }}" style="{{ d.saveStyle }}">Save update</button>
+          </div>
+
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            <span style="font-weight: 600">Updates</span>
+            <sc-for list="{{ d.history }}" as="h" hint-placeholder-count="2">
+              <div style="padding: 10px 12px; background: #FFFFFF; border: 1px solid #D6DDE3; border-radius: 8px; display: flex; flex-direction: column; gap: 2px">
+                <span style="font-size: 13px; color: #586674">{{ h.who }} · {{ h.when }}</span>
+                <span>{{ h.text }}</span>
+              </div>
+            </sc-for>
+          </div>
+        </sc-if>
+      </div>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1440,"height":980}}'>
+class Component extends DCLogic {
+  constructor(props) {
+    super(props);
+    var issued = { who: 'Cecil Ingram', when: 'Nov 3, 2026', text: 'Found during the Nov 3 visit' };
+    this.state = {
+      filter: 'all', exported: false, phoneView: 'list', sel: null, pick: null, note: '', photo: false, saved: false,
+      links: [{ id: 'l1', name: 'Alex Rivera', role: 'Maintenance lead, Pine Grove Cottages', active: true, copied: false }],
+      items: [
+        { id: 'a1', no: 1, title: 'Roof debris', loc: 'Cottage 1 · Building envelope / Roof', prio: 'REQ', assignee: 'Alex Rivera', due: '2026-12-15', status: 'open', rec: 'Roof debris needs clearing, including vegetation and mechanical parts.', history: [issued] },
+        { id: 'a2', no: 2, title: 'TPO repairs not per specs', loc: 'Cottages 1 to 3 · Building envelope / Roof', prio: 'REQ', assignee: 'Alex Rivera', due: '2027-01-15', status: 'progress', rec: 'TPO repairs should be per manufacturer specifications to protect the roof warranty. This should include proper materials including cut edge sealant usage.', history: [issued, { who: 'Alex Rivera', when: 'Nov 20, 2026', text: 'Roofer booked for Dec 8.' }] },
+        { id: 'a3', no: 3, title: 'Gutters and downspouts', loc: 'Cottage 2 · Building envelope / Gutters', prio: 'REC', assignee: 'Alex Rivera', due: '2026-11-20', status: 'open', rec: 'Gutters and downspouts need to be cleaned and in some areas reattached. Verify drains flow away from the buildings as designed.', history: [issued] },
+        { id: 'a4', no: 4, title: 'Stained ceiling tiles', loc: 'Cottage 3 · Interior / Ceilings', prio: 'REC', assignee: 'Alex Rivera', due: '2027-02-01', status: 'open', rec: 'After leaks have been properly repaired, stained ceiling tiles need to be replaced, and painted ceiling damage repaired.', history: [issued] },
+        { id: 'a5', no: 5, title: 'Sidewalk cracks', loc: 'Site · Walks', prio: 'REC', assignee: 'TBD', due: '', status: 'open', rec: 'Some repair to sidewalk cracks would help prevent further damage.', history: [issued] },
+        { id: 'a6', no: 6, title: 'Fire alarm trouble alerts', loc: 'Cottage 2 · Life safety', prio: 'REQ', assignee: 'Alex Rivera', due: '2026-11-30', status: 'done', rec: 'Repairs should be made and trouble alerts and alarms need to be cleared from the alarm panel.', history: [issued, { who: 'Alex Rivera', when: 'Nov 24, 2026', text: 'Marked Done: panel cleared by the alarm company.' }] }
+      ]
+    };
+  }
+
+  renderVals() {
+    var self = this;
+    var s = this.state;
+    var today = '2026-11-26';
+    var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    var fmt = function (iso) { return iso ? months[Number(iso.slice(5, 7)) - 1] + ' ' + Number(iso.slice(8, 10)) + ', ' + iso.slice(0, 4) : 'TBD'; };
+    var isOver = function (it) { return it.status !== 'done' && !!it.due && it.due < today; };
+    var pill = function (bg, fg) { return 'display: inline-block; padding: 3px 9px; border-radius: 20px; font-size: 12px; font-weight: 600; white-space: nowrap; background: ' + bg + '; color: ' + fg; };
+    var STATUS = { open: ['Open', pill('#E9EDF0', '#17212B')], progress: ['In progress', pill('#F7ECD9', '#7A4A05')], done: ['Done', pill('#E2F1E8', '#22603B')] };
+    var PRIO = { REQ: ['Required', pill('#F7E1DE', '#8F2A20')], REC: ['Recommended', pill('#F7ECD9', '#7A4A05')] };
+    var chipOff = 'min-height: 40px; padding: 0 14px; border: 1px solid #D6DDE3; border-radius: 20px; background: #FFFFFF; color: #17212B; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer';
+    var chipOn = 'min-height: 40px; padding: 0 14px; border: 1px solid #17212B; border-radius: 20px; background: #17212B; color: #FFFFFF; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer';
+
+    var counts = { open: 0, progress: 0, done: 0, overdue: 0 };
+    s.items.forEach(function (it) { counts[it.status]++; if (isOver(it)) counts.overdue++; });
+
+    var filters = [['all', 'All', s.items.length], ['open', 'Open', counts.open], ['progress', 'In progress', counts.progress], ['done', 'Done', counts.done], ['overdue', 'Overdue', counts.overdue]].map(function (f) {
+      return { label: f[1], n: f[2], on: s.filter === f[0], style: s.filter === f[0] ? chipOn : chipOff, pick: function () { self.setState({ filter: f[0] }); } };
+    });
+
+    var shown = s.items.filter(function (it) { return s.filter === 'all' || (s.filter === 'overdue' ? isOver(it) : it.status === s.filter); });
+    var rows = shown.map(function (it) {
+      var last = it.history[it.history.length - 1];
+      return { no: it.no, title: it.title, loc: it.loc, prioLabel: PRIO[it.prio][0], prioStyle: PRIO[it.prio][1], assignee: it.assignee, due: fmt(it.due), overdue: isOver(it), statusLabel: STATUS[it.status][0], statusStyle: STATUS[it.status][1], last: last.who + ' · ' + last.when };
+    });
+
+    var links = s.links.map(function (l) {
+      return {
+        name: l.name, role: l.role,
+        stateLabel: l.active ? 'Active' : 'Turned off',
+        stateStyle: l.active ? pill('#E2F1E8', '#22603B') : pill('#E9EDF0', '#586674'),
+        copyLabel: l.copied ? 'Copied' : 'Copy link',
+        toggleLabel: l.active ? 'Turn off' : 'Turn on',
+        copy: function () {
+          self.setState({ links: self.state.links.map(function (x) { return x.id === l.id ? Object.assign({}, x, { copied: true }) : x; }) });
+          setTimeout(function () { self.setState({ links: self.state.links.map(function (x) { return x.id === l.id ? Object.assign({}, x, { copied: false }) : x; }) }); }, 1500);
+        },
+        toggle: function () { self.setState({ links: self.state.links.map(function (x) { return x.id === l.id ? Object.assign({}, x, { active: !x.active }) : x; }) }); }
+      };
+    });
+
+    var person = s.links[0];
+    var phoneOff = !person.active;
+    var dueText = function (it) { return it.status === 'done' ? '' : (it.due ? (isOver(it) ? 'Overdue · was due ' + fmt(it.due) : 'Due ' + fmt(it.due)) : 'No due date'); };
+    var dueStyle = function (it) { return isOver(it) ? 'color: #8F2A20; font-weight: 600; font-size: 13px' : 'color: #586674; font-size: 13px'; };
+    var order = { open: 0, progress: 1, done: 2 };
+    var phoneItems = s.items.slice().sort(function (a, b) { return order[a.status] - order[b.status] || a.no - b.no; }).map(function (it) {
+      return { title: it.title, loc: it.loc, statusLabel: STATUS[it.status][0], statusStyle: STATUS[it.status][1], dueText: dueText(it), dueStyle: dueStyle(it),
+        open: function () { self.setState({ phoneView: 'detail', sel: it.id, pick: null, note: '', photo: false, saved: false }); } };
+    });
+
+    var it = s.items.find(function (x) { return x.id === s.sel; }) || s.items[0];
+    var big = function (on) { return 'min-height: 48px; border-radius: 8px; font: inherit; font-weight: 600; cursor: pointer; border: 2px solid ' + (on ? '#1F4B6E' : '#D6DDE3') + '; background: ' + (on ? '#1F4B6E' : '#FFFFFF') + '; color: ' + (on ? '#FFFFFF' : '#17212B'); };
+    var cantSave = !s.pick && !s.note.trim() && !s.photo;
+    var d = {
+      title: it.title, loc: it.loc, rec: it.rec,
+      prioLabel: PRIO[it.prio][0], prioStyle: PRIO[it.prio][1],
+      statusLabel: STATUS[it.status][0], statusStyle: STATUS[it.status][1],
+      dueText: dueText(it), dueStyle: dueStyle(it),
+      progressOn: s.pick === 'progress', doneOn: s.pick === 'done',
+      progressStyle: big(s.pick === 'progress'), doneStyle: big(s.pick === 'done'),
+      pickProgress: function () { self.setState({ pick: self.state.pick === 'progress' ? null : 'progress' }); },
+      pickDone: function () { self.setState({ pick: self.state.pick === 'done' ? null : 'done' }); },
+      note: s.note,
+      setNote: function (e) { self.setState({ note: e.target.value }); },
+      photoLabel: s.photo ? '1 photo attached · tap to remove' : 'Add a photo',
+      togglePhoto: function () { self.setState({ photo: !self.state.photo }); },
+      cantSave: cantSave,
+      saveStyle: 'min-height: 48px; border: 0; border-radius: 8px; font: inherit; font-weight: 600; color: #FFFFFF; background: ' + (cantSave ? '#9AA8B5' : '#1F4B6E') + '; cursor: ' + (cantSave ? 'not-allowed' : 'pointer'),
+      history: it.history.slice().reverse(),
+      back: function () { self.setState({ phoneView: 'list' }); },
+      save: function () {
+        var st = self.state;
+        if (!st.pick && !st.note.trim() && !st.photo) return;
+        var parts = [];
+        if (st.pick) parts.push('Marked ' + STATUS[st.pick][0]);
+        if (st.note.trim()) parts.push(st.note.trim());
+        if (st.photo) parts.push('(1 photo)');
+        var entry = { who: person.name, when: 'Just now', text: parts.join(': ') };
+        self.setState({
+          items: st.items.map(function (x) { return x.id === it.id ? Object.assign({}, x, { status: st.pick || x.status, history: x.history.concat([entry]) }) : x; }),
+          phoneView: 'list', pick: null, note: '', photo: false, saved: true
+        });
+      }
+    };
+
+    return {
+      counts: counts, filters: filters, rows: rows, noRows: rows.length === 0, links: links,
+      exportLabel: s.exported ? 'Excel downloaded (prototype)' : 'Export to Excel',
+      exportExcel: function () { self.setState({ exported: true }); },
+      addLink: function () {
+        if (self.state.links.length > 1) return;
+        self.setState({ links: self.state.links.concat([{ id: 'l2', name: 'Jordan Lee', role: 'Administrator, Pine Grove Cottages', active: true, copied: false }]) });
+      },
+      phoneName: person.name, phoneFirst: person.name.split(' ')[0],
+      phoneOff: phoneOff, phoneList: !phoneOff && s.phoneView === 'list', phoneDetail: !phoneOff && s.phoneView === 'detail',
+      phoneOpenCount: counts.open + counts.progress, saved: s.saved,
+      phoneItems: phoneItems, d: d
+    };
+  }
+}
+</script>
+</body>
+</html>
