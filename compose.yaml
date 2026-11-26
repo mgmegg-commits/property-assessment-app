@@ -33,7 +33,17 @@ services:
       APP_ENV: ${APP_ENV:-production}
       LOAD_FIXTURES: ${LOAD_FIXTURES:-0}
       FIXTURES_DIR: /fixtures
+      APP_PASSWORD: ${APP_PASSWORD:?Run ./start.sh first; it creates .env with a password}
+      SESSION_SECRET: ${SESSION_SECRET:?Run ./start.sh first; it creates .env with a session secret}
+      DATA_DIR: /data
+      # The address personal update links use (./start.sh sets it to this computer's HTTPS address).
+      PUBLIC_URL: ${PUBLIC_URL:-}
+      TIME_ZONE: ${TIME_ZONE:-America/Chicago}
+      # Drafting with Claude: optional; everything else works without it.
+      ANTHROPIC_API_KEY: ${ANTHROPIC_API_KEY:-}
     volumes:
+      # Photos, never removed. Back this up with the database.
+      - app-data:/data
       # Test data, read-only. Only loaded when APP_ENV=development and LOAD_FIXTURES=1.
       - ./tests/fixtures/seed:/fixtures:ro
     depends_on:
@@ -65,5 +75,6 @@ services:
 
 volumes:
   db-data:
+  app-data:
   caddy-data:
   caddy-config:

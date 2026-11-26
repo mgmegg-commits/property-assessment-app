@@ -33,7 +33,8 @@ When porting a later v1 fix, update the commit above.
 | `export/tracker.js` `TRACKER_COLUMNS` and widths | `model/tracker.ts`, `data/tracker-columns.json` | Only the columns; the export comes in step 2.9 |
 | `util/format.js` | `util/format.ts` | The date helpers the model uses; display helpers come with the screens |
 | `util/ids.js` | `util/ids.ts` | `SESSION_ID` left behind |
-| `drafting/*` (transcript shape) | `model/transcripts.ts` | Only the transcript document and its migration; drafting is step 2.8 |
+| `drafting/*` (transcript shape) | `model/transcripts.ts` | The transcript document and its migration |
+| `drafting/prompt.js`, `claudeDraft.js` (`readIssues`, `readDraft`), `training.js`, `spellingPrompt.js` | `drafting/prompt.ts`, `read.ts`, `training.ts`, `spelling.ts` | Ported in the simplified build for the server's drafting and spelling check; the prompt text is v1's word for word. Applying a draft stays in v1's page, which v2 serves unchanged |
 
 ## What's different from v1, on purpose
 
@@ -73,12 +74,12 @@ The ported tests are in `test/v1`, kept as JavaScript (`.test.mjs`) so their bod
 | `model.test.mjs` | 3 | 3 | — | — |
 | `priorities.test.mjs` | 4 | 4 | — | — |
 | `versions.test.mjs` | 3 | 3 | — | — |
-| `phrases.test.mjs` | 4 | 3 | — | 1 (2.8) |
+| `phrases.test.mjs` | 4 | 4 | — | — |
 | `sections.test.mjs` | 17 | 12 | 1 | 5 (2.8) |
 | `photos.test.mjs` | 7 | 7 | 1 | — |
 | `actions.test.mjs` | 6 | 4 | 2 | 2 (2.9) |
 | `tracker.test.mjs` | 3 | 1 | — | 2 (2.9) |
-| **Total** | **47** | **37** | **4** | **10** |
+| **Total** | **47** | **38** | **4** | **9** |
 
 v1 has no `checks.test.mjs`. Its checks are tested inside `priorities`, `sections` and `actions`, and here also in `test/model.test.ts`.
 
@@ -88,11 +89,10 @@ v1 has no `checks.test.mjs`. Its checks are tested inside `priorities`, `section
 - `sections` "merging findings keeps the first's text…" puts the due dates in `v1FollowUp` and checks the earliest is kept there (v1: `f.action.due`).
 - `photos` "schema 6: older photos get an empty list of extra places" expects `SCHEMA_VERSION` 7 (v1: 6). The rest is unchanged.
 
-**Not yet ported, because the code they test comes later:**
+**Not yet ported, because the code they test isn't in `packages/core`.** In the simplified build, v1's page (served unchanged) applies drafts and makes the exports itself, so these stay covered by v1's own tests on v1's code:
 
 | Test | v1 file | Needs | Step |
 | --- | --- | --- | --- |
-| drafts are asked to reuse his wording | `phrases` | `drafting/prompt.js` | 2.8 |
 | the draft fills in the report's own subsections, ratings, notes and summaries | `sections` | `drafting/applyDraft.js`, `claudeDraft.js` | 2.8 |
 | the draft never overwrites what Cecil set, and re-draft replaces only drafted values | `sections` | the same | 2.8 |
 | Accept all clears a section's drafted marks | `sections` | the same (stand-in now in `test/drafted-marks.test.ts`) | 2.8 |

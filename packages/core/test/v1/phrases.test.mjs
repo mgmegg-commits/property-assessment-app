@@ -4,6 +4,8 @@
 import { test } from "vitest";
 import assert from "node:assert/strict";
 import { DEFAULT_PHRASES, phraseLibrary, searchPhrases, withPhrase, suggestedTitle } from "@crb/core";
+import { buildDraftPrompt } from "@crb/core";
+import { newAssessment } from "@crb/core";
 import { defaultSettings } from "@crb/core";
 
 test("seeded with Cecil's 21 phrases", () => {
@@ -29,4 +31,9 @@ test("inserting adds the phrase after what's there; saving suggests a title", ()
   assert.equal(suggestedTitle("Seal coating is due this spring."), "Seal coating is due");
 });
 
-// Deferred to step 2.8 (drafting): "drafts are asked to reuse his wording" (needs drafting/prompt.js buildDraftPrompt).
+test("drafts are asked to reuse his wording", () => {
+  const prompt = buildDraftPrompt(newAssessment({ templateKey: "healthcare" }), [{ id: "s1", start: 0, end: 1, text: "Roof." }], [], DEFAULT_PHRASES);
+  assert.match(prompt, /Cecil's standard wording/);
+  assert.match(prompt, /- Roof ponding: Proper tapering and cricketing is needed to eliminate roof ponding\./);
+  assert.doesNotMatch(buildDraftPrompt(newAssessment({ templateKey: "healthcare" }), []), /standard wording/, "no block without phrases");
+});

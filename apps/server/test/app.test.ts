@@ -12,6 +12,7 @@ import { loadFixtures } from "../src/fixtures.js";
 import { migrate, readMigrations } from "../src/migrate.js";
 import { CONTENT_SECURITY_POLICY } from "../src/security.js";
 import { inlineScriptHashes, loadV1Page, type V1Page } from "../src/v1page.js";
+import { testConfig } from "./helpers.js";
 import { createTestDatabase, type TestDatabase } from "../../../tests/setup/test-database.js";
 
 const SEED = fileURLToPath(new URL("../../../tests/fixtures/seed/", import.meta.url));
@@ -42,7 +43,7 @@ afterAll(async () => {
 
 let v1Page: V1Page;
 const app = (env: "production" | "development", overrides: { pool?: Pool; webDist?: string } = {}) =>
-  buildApp({ config: { env, webDist: overrides.webDist ?? webDist }, pool: overrides.pool ?? pool, version: "2.0.0-test", v1Page });
+  buildApp({ config: testConfig({ env, webDist: overrides.webDist ?? webDist }), pool: overrides.pool ?? pool, version: "2.0.0-test", v1Page });
 
 describe("GET /api/health", () => {
   it("says the app and database are working, with no data in it", async () => {
