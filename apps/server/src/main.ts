@@ -11,15 +11,17 @@ import { createPool, waitForDatabase } from "./db.js";
 import { FixtureError, loadFixtures } from "./fixtures.js";
 import { MigrationError, migrate, readMigrations } from "./migrate.js";
 import { appVersion } from "./version.js";
+import { loadV1Page } from "./v1page.js";
 
 async function main(): Promise<void> {
   const config = loadConfig();
   const pool = createPool(config.databaseUrl);
   const version = appVersion();
-  const app = await buildApp({ config, pool, version, logger: { level: config.logLevel } });
+  const v1Page = loadV1Page(config.v1Web);
+  const app = await buildApp({ config, pool, version, v1Page, logger: { level: config.logLevel } });
   const log = app.log;
 
-  log.info(`Cecil's Report Builder ${version} (${config.env})`);
+  log.info(`Cecil's Report Builder ${version} (${config.env}), v1 front end ${v1Page.version.commit.slice(0, 7)}`);
   await waitForDatabase(pool, { onWait: () => log.info("Waiting for the database…") });
   const { applied, current } = await migrate(pool, await readMigrations());
   log.info(applied.length ? `Database updated to version ${current} (applied ${applied.join(", ")})` : `Database at version ${current}`);

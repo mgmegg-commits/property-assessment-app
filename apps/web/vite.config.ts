@@ -4,6 +4,8 @@ import react from "@vitejs/plugin-react";
 
 export default defineConfig({
   root: fileURLToPath(new URL(".", import.meta.url)),
+  // "/" is v1's page; this app's files live under /app/.
+  base: "/app/",
   plugins: [react()],
   resolve: {
     // Use @crb/core's TypeScript source directly, so the web app never needs it built first.

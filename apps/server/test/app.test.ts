@@ -1,3 +1,5 @@
+import { createHash } from "node:crypto";
+import { readFileSync } from "node:fs";
 import { mkdir, mkdtemp, rm, writeFile } from "node:fs/promises";
 import { tmpdir } from "node:os";
 import path from "node:path";
@@ -9,9 +11,11 @@ import { createPool, type Pool } from "../src/db.js";
 import { loadFixtures } from "../src/fixtures.js";
 import { migrate, readMigrations } from "../src/migrate.js";
 import { CONTENT_SECURITY_POLICY } from "../src/security.js";
+import { inlineScriptHashes, loadV1Page, type V1Page } from "../src/v1page.js";
 import { createTestDatabase, type TestDatabase } from "../../../tests/setup/test-database.js";
 
 const SEED = fileURLToPath(new URL("../../../tests/fixtures/seed/", import.meta.url));
+const V1_WEB = fileURLToPath(new URL("../../v1-web/", import.meta.url));
 
 let db: TestDatabase;
 let pool: Pool;
@@ -27,6 +31,7 @@ beforeAll(async () => {
   await mkdir(path.join(webDist, "assets"));
   await writeFile(path.join(webDist, "index.html"), "<!doctype html><title>Cecil's Report Builder</title><div id=\"root\"></div>");
   await writeFile(path.join(webDist, "assets", "index-abc123.js"), "console.log('app');");
+  v1Page = loadV1Page(V1_WEB);
 });
 
 afterAll(async () => {
@@ -35,8 +40,9 @@ afterAll(async () => {
   if (webDist) await rm(webDist, { recursive: true, force: true });
 });
 
+let v1Page: V1Page;
 const app = (env: "production" | "development", overrides: { pool?: Pool; webDist?: string } = {}) =>
-  buildApp({ config: { env, webDist: overrides.webDist ?? webDist }, pool: overrides.pool ?? pool, version: "2.0.0-test" });
+  buildApp({ config: { env, webDist: overrides.webDist ?? webDist }, pool: overrides.pool ?? pool, version: "2.0.0-test", v1Page });
 
 describe("GET /api/health", () => {
   it("says the app and database are working, with no data in it", async () => {
@@ -82,11 +88,54 @@ describe("GET /api/dev/summary", () => {
 
 describe("no organization data without signing in", () => {
   // There are no accounts until step 2.3, so a real copy must not show any organization's data on any route.
-  it.each(["/", "/api/health", "/api/dev/summary", "/api/organizations", "/reports/123"])("GET %s in a real copy names no organization", async (url) => {
+  // Not "/": v1's page has "Cecil Ingram Properties LLC" in its own code, as the default company name.
+  it.each(["/status", "/api/health", "/api/dev/summary", "/api/organizations", "/reports/123"])("GET %s in a real copy names no organization", async (url) => {
     const server = await app("production");
     const response = await server.inject(url);
     for (const name of ["Cecil Ingram Properties LLC", "Example Owner LLC", "Example Operator"]) expect(response.body).not.toContain(name);
     await server.close();
+  });
+});
+
+describe("v1's front end at /", () => {
+  let server: FastifyInstance;
+  beforeAll(async () => {
+    server = await app("production");
+  });
+  afterAll(() => server.close());
+
+  it("is v1's built page, byte for byte, from the pinned commit", async () => {
+    const response = await server.inject("/");
+    expect(response.statusCode).toBe(200);
+    expect(response.headers["content-type"]).toMatch(/text\/html/);
+    expect(response.rawPayload.equals(readFileSync(path.join(V1_WEB, "index.html")))).toBe(true);
+    expect(createHash("sha256").update(response.rawPayload).digest("hex")).toBe(v1Page.version.sha256);
+    expect(response.headers["cache-control"]).toBe("no-cache");
+    expect((await server.inject("/index.html")).rawPayload.equals(response.rawPayload)).toBe(true);
+  });
+
+  it("says which v1 commit it is", async () => {
+    const version = (await server.inject("/api/v1-version")).json();
+    expect(version.commit).toMatch(/^[0-9a-f]{40}$/);
+    expect(version.repo).toBe("mgmegg-commits/cecil-report-app");
+  });
+
+  it("gets a policy that allows its inline script by hash, its CDN libraries and fonts, and nothing else", async () => {
+    const csp = String((await server.inject("/")).headers["content-security-policy"]);
+    const [hash] = inlineScriptHashes(readFileSync(path.join(V1_WEB, "index.html"), "utf8"));
+    expect(csp).toContain(`script-src 'self' ${hash} https://cdnjs.cloudflare.com https://cdn.jsdelivr.net`);
+    expect(csp).not.toContain("unsafe-eval");
+    expect(csp).toContain("https://fonts.googleapis.com");
+    expect(csp).toContain("frame-ancestors 'none'");
+    expect(csp).toContain("connect-src 'self'");
+  });
+
+  it("refuses to start from a page that doesn't match its VERSION.json", async () => {
+    const dir = await mkdtemp(path.join(tmpdir(), "crb-v1-"));
+    await writeFile(path.join(dir, "index.html"), "<p>changed</p>");
+    await writeFile(path.join(dir, "VERSION.json"), readFileSync(path.join(V1_WEB, "VERSION.json")));
+    expect(() => loadV1Page(dir)).toThrow(/doesn't match its VERSION\.json/);
+    await rm(dir, { recursive: true, force: true });
   });
 });
 
@@ -97,41 +146,38 @@ describe("the web app", () => {
   });
   afterAll(() => server.close());
 
-  it("serves the start page at /", async () => {
-    const response = await server.inject("/");
+  it("serves the status page at /status", async () => {
+    const response = await server.inject("/status");
     expect(response.statusCode).toBe(200);
     expect(response.headers["content-type"]).toMatch(/text\/html/);
     expect(response.body).toContain('<div id="root">');
     expect(response.headers["cache-control"]).toBe("no-cache");
+    expect(response.headers["content-security-policy"]).toBe(CONTENT_SECURITY_POLICY);
   });
 
-  it("serves the start page for the web app's own paths, so a bookmarked page opens", async () => {
-    const response = await server.inject("/reports/123/findings");
-    expect(response.statusCode).toBe(200);
-    expect(response.body).toContain('<div id="root">');
-  });
-
-  it("serves built files with a long cache, since their names change when they do", async () => {
-    const response = await server.inject("/assets/index-abc123.js");
+  it("serves built files under /app/ with a long cache, since their names change when they do", async () => {
+    const response = await server.inject("/app/assets/index-abc123.js");
     expect(response.statusCode).toBe(200);
     expect(response.headers["cache-control"]).toContain("immutable");
   });
 
-  it("answers unknown API paths with a 404 in JSON, not the page", async () => {
-    const response = await server.inject("/api/nothing-here");
-    expect(response.statusCode).toBe(404);
-    expect(response.json()).toEqual({ error: "Not found." });
+  it("answers paths it doesn't know with a 404, not a page", async () => {
+    for (const url of ["/api/nothing-here", "/reports/123", "/app/nothing.js"]) {
+      const response = await server.inject(url);
+      expect(response.statusCode, url).toBe(404);
+      expect(response.json()).toEqual({ error: "Not found." });
+    }
   });
 
-  it("doesn't serve the page for other methods", async () => {
-    const response = await server.inject({ method: "POST", url: "/reports" });
+  it("doesn't serve a page for other methods", async () => {
+    const response = await server.inject({ method: "POST", url: "/status" });
     expect(response.statusCode).toBe(404);
   });
 
   it("sends the security headers on pages and API answers", async () => {
-    for (const url of ["/", "/api/health", "/assets/index-abc123.js", "/api/nothing-here"]) {
+    for (const url of ["/status", "/api/health", "/app/assets/index-abc123.js", "/api/nothing-here", "/"]) {
       const response = await server.inject(url);
-      expect(response.headers["content-security-policy"]).toBe(CONTENT_SECURITY_POLICY);
+      if (url !== "/") expect(response.headers["content-security-policy"]).toBe(CONTENT_SECURITY_POLICY);
       expect(response.headers["x-content-type-options"]).toBe("nosniff");
       expect(response.headers["x-frame-options"]).toBe("DENY");
       expect(response.headers["x-robots-tag"]).toBe("noindex, nofollow");
@@ -141,7 +187,7 @@ describe("the web app", () => {
   it("still serves the API when the web app hasn't been built", async () => {
     const apiOnly = await app("production", { webDist: path.join(webDist, "missing") });
     expect((await apiOnly.inject("/api/health")).statusCode).toBe(200);
-    expect((await apiOnly.inject("/")).statusCode).toBe(404);
+    expect((await apiOnly.inject("/status")).statusCode).toBe(404);
     await apiOnly.close();
   });
 });

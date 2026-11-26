@@ -29,7 +29,10 @@ export const SECURITY_HEADERS: Record<string, string> = {
 
 export function addSecurityHeaders(app: FastifyInstance): void {
   app.addHook("onSend", async (_request, reply, payload) => {
-    for (const [name, value] of Object.entries(SECURITY_HEADERS)) reply.header(name, value);
+    for (const [name, value] of Object.entries(SECURITY_HEADERS)) {
+      // A route may set its own policy (v1's page does: it has inline code and CDN libraries).
+      if (!reply.hasHeader(name)) reply.header(name, value);
+    }
     if (!reply.hasHeader("cache-control")) reply.header("cache-control", "no-store");
     return payload;
   });

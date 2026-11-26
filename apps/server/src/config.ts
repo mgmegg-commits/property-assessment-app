@@ -18,6 +18,8 @@ export interface Config {
   fixturesDir: string | null;
   /** The built web app (apps/web/dist). */
   webDist: string;
+  /** v1's front end, built from a pinned commit (apps/v1-web). */
+  v1Web: string;
   logLevel: string;
 }
 
@@ -29,12 +31,14 @@ const Env = z.object({
   LOAD_FIXTURES: z.enum(["0", "1"], { error: "LOAD_FIXTURES must be 0 or 1." }).default("0"),
   FIXTURES_DIR: z.string().min(1).optional(),
   WEB_DIST: z.string().min(1).optional(),
+  V1_WEB: z.string().min(1).optional(),
   LOG_LEVEL: z.enum(["fatal", "error", "warn", "info", "debug", "trace", "silent"]).default("info"),
 });
 
 export class ConfigError extends Error {}
 
 const DEFAULT_WEB_DIST = fileURLToPath(new URL("../../web/dist/", import.meta.url));
+const DEFAULT_V1_WEB = fileURLToPath(new URL("../../v1-web/", import.meta.url));
 
 export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
   const parsed = Env.safeParse(env);
@@ -51,6 +55,7 @@ export function loadConfig(env: NodeJS.ProcessEnv = process.env): Config {
     loadFixtures,
     fixturesDir: e.FIXTURES_DIR ?? null,
     webDist: e.WEB_DIST ?? DEFAULT_WEB_DIST,
+    v1Web: e.V1_WEB ?? DEFAULT_V1_WEB,
     logLevel: e.LOG_LEVEL,
   };
 }

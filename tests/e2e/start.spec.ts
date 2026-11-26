@@ -14,7 +14,7 @@ const row = (page: Page, label: string) => page.locator(".status-row", { has: pa
 
 test("the start page says the app and database work, and shows the test data", async ({ page }) => {
   const errors = watchForErrors(page);
-  const response = await page.goto("/");
+  const response = await page.goto("/status");
   expect(response?.status()).toBe(200);
   expect(response?.headers()["content-security-policy"]).toContain("default-src 'self'");
 
@@ -37,22 +37,17 @@ test("the start page says the app and database work, and shows the test data", a
 });
 
 test("fits the screen with no sideways scrolling", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/status");
   await expect(row(page, "Test data")).toContainText("loaded");
   const overflow = await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
   expect(overflow).toBeLessThanOrEqual(0);
 });
 
 test("status rows are big enough to read and tap on a phone", async ({ page }) => {
-  await page.goto("/");
+  await page.goto("/status");
   await expect(row(page, "Database")).toContainText("Connected");
   for (const label of ["App", "Database", "Test data"]) {
     const box = await row(page, label).boundingBox();
     expect(box?.height ?? 0).toBeGreaterThanOrEqual(44);
   }
-});
-
-test("a page address inside the app opens the app, not an error", async ({ page }) => {
-  await page.goto("/reports/123/findings");
-  await expect(page.getByRole("heading", { name: "Status" })).toBeVisible();
 });
