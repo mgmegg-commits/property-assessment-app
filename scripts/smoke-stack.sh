@@ -29,6 +29,8 @@ cat > .env <<EOF
 APP_ENV=development
 LOAD_FIXTURES=1
 POSTGRES_PASSWORD=smoke$(date +%s)
+APP_PASSWORD=smoke-password
+SESSION_SECRET=smoke-secret-0123456789abcdef
 APP_PORT=18080
 HTTPS_PORT=18443
 SETUP_PORT=18081
@@ -46,7 +48,12 @@ check() {
 }
 
 check "the app on this computer (HTTP)" '"database":"ok"' http://localhost:18080/api/health
-check "the start page" '<div id="root">' http://localhost:18080/
+check "v1's page" "Cecil's Report Builder" http://localhost:18080/
+check "the status page" '<div id="root">' http://localhost:18080/status
+login=$(curl --noproxy "*" --silent --show-error --fail --max-time 10 -c "$work/cookies" -H "content-type: application/json" -d '{"password":"smoke-password"}' http://localhost:18080/api/login) || fail "signing in didn't work"
+grep -q '"ok":true' <<<"$login" || fail "signing in didn't work: $login"
+check "a signed-in API call" '"assessments"' -b "$work/cookies" http://localhost:18080/api/assessments
+echo "ok: signing in with the password"
 check "the test data" 'Cecil Ingram Properties LLC' http://localhost:18080/api/dev/summary
 check "the set-up page" 'Download the certificate' http://localhost:18081/
 

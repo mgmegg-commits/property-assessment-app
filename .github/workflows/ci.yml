@@ -41,6 +41,8 @@ jobs:
       - run: npm run lint
       - run: npm run check
       - run: npm test
+      - name: v1's own server tests, against v2
+        run: npm run test:v1-server
       - name: Install Chromium and WebKit for the browser tests
         run: npx playwright install --with-deps chromium webkit
       - name: Browser tests (iPhone, iPad and desktop sizes; Chromium and WebKit)

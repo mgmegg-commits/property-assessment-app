@@ -1,18 +1,33 @@
 import { describe, expect, it } from "vitest";
 import { ConfigError, loadConfig } from "../src/config.js";
 
-const base = { DATABASE_URL: "postgres://u:p@localhost:5432/reports" };
+const base = { DATABASE_URL: "postgres://u:p@localhost:5432/reports", APP_PASSWORD: "pw", SESSION_SECRET: "0123456789abcdef0123" };
 
 describe("loadConfig", () => {
   it("defaults to a real (production) copy with no test data", () => {
     const config = loadConfig(base);
-    expect(config).toMatchObject({ env: "production", loadFixtures: false, port: 3000, host: "0.0.0.0", fixturesDir: null, logLevel: "info" });
+    expect(config).toMatchObject({ env: "production", loadFixtures: false, port: 3000, host: "0.0.0.0", fixturesDir: null, logLevel: "info",
+      password: "pw", secureCookies: false, publicUrl: "", timeZone: "America/Chicago", draftModel: "claude-opus-5-5", trainingExamples: 3, claudeConfigured: false });
+    expect(config.dataDir).toMatch(/data$/);
     expect(config.webDist).toMatch(/web[/\\]dist[/\\]?$/);
   });
 
+  it("needs the password and session secret", () => {
+    expect(() => loadConfig({ ...base, APP_PASSWORD: "" })).toThrow(/APP_PASSWORD/);
+    expect(() => loadConfig({ ...base, SESSION_SECRET: undefined })).toThrow(/SESSION_SECRET/);
+    expect(() => loadConfig({ ...base, SESSION_SECRET: "short" })).toThrow(/at least 16/);
+  });
+
+  it("reads drafting, the public address and the time zone", () => {
+    const config = loadConfig({ ...base, ANTHROPIC_API_KEY: "sk-test", PUBLIC_URL: "https://reports.example.com/", TIME_ZONE: "America/New_York", SECURE_COOKIES: "1", DATA_DIR: "/data" });
+    expect(config).toMatchObject({ claudeConfigured: true, publicUrl: "https://reports.example.com", timeZone: "America/New_York", secureCookies: true, dataDir: "/data" });
+    expect(() => loadConfig({ ...base, TIME_ZONE: "Mars/Olympus" })).toThrow(/isn't a time zone/);
+    expect(() => loadConfig({ ...base, PUBLIC_URL: "reports.example.com" })).toThrow(/PUBLIC_URL/);
+  });
+
   it("needs the database address", () => {
-    expect(() => loadConfig({})).toThrow(ConfigError);
-    expect(() => loadConfig({})).toThrow(/DATABASE_URL/);
+    expect(() => loadConfig({ APP_PASSWORD: "pw", SESSION_SECRET: "0123456789abcdef0123" })).toThrow(ConfigError);
+    expect(() => loadConfig({ APP_PASSWORD: "pw", SESSION_SECRET: "0123456789abcdef0123" })).toThrow(/DATABASE_URL/);
   });
 
   it("reads a development copy that loads test data", () => {

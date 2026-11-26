@@ -37,3 +37,9 @@ export * from "./model/transcripts.js";
 export * from "./model/tracker.js";
 export * from "./util/format.js";
 export { uid, deepClone } from "./util/ids.js";
+
+/* ---------- Drafting, for the server (ported from v1 src/js/drafting) ---------- */
+export * from "./drafting/prompt.js";
+export * from "./drafting/read.js";
+export * from "./drafting/training.js";
+export * from "./drafting/spelling.js";

@@ -11,29 +11,35 @@ import { createPool, waitForDatabase } from "./db.js";
 import { FixtureError, loadFixtures } from "./fixtures.js";
 import { MigrationError, migrate, readMigrations } from "./migrate.js";
 import { appVersion } from "./version.js";
+import { loadV1Page } from "./v1page.js";
+import { followUpOptions } from "./followup.js";
+
+const log = (message: string) => console.log(JSON.stringify({ level: 30, time: Date.now(), msg: message }));
 
 async function main(): Promise<void> {
   const config = loadConfig();
   const pool = createPool(config.databaseUrl);
   const version = appVersion();
-  const app = await buildApp({ config, pool, version, logger: { level: config.logLevel } });
-  const log = app.log;
+  const v1Page = loadV1Page(config.v1Web);
 
-  log.info(`Cecil's Report Builder ${version} (${config.env})`);
-  await waitForDatabase(pool, { onWait: () => log.info("Waiting for the database…") });
+  log(`Cecil's Report Builder ${version} (${config.env}), v1 front end ${v1Page.version.commit.slice(0, 7)}`);
+  await waitForDatabase(pool, { onWait: () => log("Waiting for the database…") });
   const { applied, current } = await migrate(pool, await readMigrations());
-  log.info(applied.length ? `Database updated to version ${current} (applied ${applied.join(", ")})` : `Database at version ${current}`);
+  log(applied.length ? `Database updated to version ${current} (applied ${applied.join(", ")})` : `Database at version ${current}`);
 
   if (config.loadFixtures && config.fixturesDir) {
     const fixtures = await loadFixtures(pool, config.fixturesDir);
-    log.info(fixtures.loaded ? `Loaded test data: ${fixtures.organizations} organizations` : "Test data already loaded");
+    log(fixtures.loaded ? `Loaded test data: ${fixtures.organizations} organizations` : "Test data already loaded");
   }
+  if (!config.claudeConfigured) log("Drafting is off until ANTHROPIC_API_KEY is set; everything else works.");
+
+  const app = await buildApp({ config, pool, version, v1Page, ...followUpOptions(config), logger: { level: config.logLevel } });
 
   let stopping = false;
   const stop = async (signal: string) => {
     if (stopping) return;
     stopping = true;
-    log.info(`${signal}: stopping`);
+    app.log.info(`${signal}: stopping`);
     await app.close();
     await pool.end();
     process.exit(0);

@@ -129,8 +129,8 @@ The working assumption is one copy of the app per client, on the client's own se
 
 | Area | Requirement |
 | --- | --- |
-| Hosting | Packaged so one copy installs on a client's server; Cecil runs his own copy for his firm. The same package runs on a Mac, Cecil's computer, a managed host or a small cloud server |
-| Data separation | Each organization sees only its own data; tenants see only their facility's items |
+| Hosting | Packaged so one copy installs on a client's server; Cecil runs his own copy for his firm. The same package runs on a Mac, Cecil's computer, a managed host or a small cloud server. For the simplified build (Nov 26): one copy, one password; client copies are later, if needed |
+| Data separation | Each organization sees only its own data; tenants see only their facility's items. For the simplified build (Nov 26): one signed-in user group, and a personal link sees only its own property's open items |
 | Security | Encrypted in transit and at rest; no public links by default; the AI provider must not train on client data |
 | Retention | Reports and photos kept forever; audio deleted once drafted; transcripts kept as drafting examples |
 | Compatibility | Every older report opens and prints. There's no v1 import (Cecil has no real reports in v1); a plain JSON import loads test data |
@@ -140,18 +140,16 @@ The working assumption is one copy of the app per client, on the client's own se
 
 ## Milestones
 
-Each milestone ends with a test against real material before the next one starts. Cecil's February visits to four South Carolina hospitals are the target for field use.
+Nov 26, 2026: simplified for Cecil's beta test with a skilled nursing operator that owns 45 sites (`docs/plan.md` section 10). The Nov 25 milestones 2 to 5 are replaced by these. What they had beyond this waits until a paying customer needs it.
 
-1. **Plan.** Claude Code proposes the architecture, data model and milestone breakdown; nothing is coded until it's reviewed.
-   - Test: the plan answers every open question below or names the decision it needs.
-2. **Assessor workflow on the new foundation.** Everything in A-1 to A-16, plus F-1 (issuing creates the action items), with server storage and Cecil's account.
-   - Test: rebuild the Midlands report from its photos, and draft a real walk-through from the local test building.
-3. **Follow-up.** F-2 to F-9 and A-17: tracker, assignment, tenant updates, overdue flags, exports, and verification at the next visit.
-   - Test: run one full cycle with three test users (client, facility, tech) on phones.
-4. **Second client.** Install a separate copy with its own branding, users and templates.
-   - Test: nothing is shared between the two copies.
-5. **Field use.** Cecil uses v2 for real visits.
-   - Test: the February hospital reports go out from v2.
+1. **Plan.** Claude Code proposes the architecture, data model and milestone breakdown; nothing is coded until it's reviewed. Done Nov 25.
+2. **Foundation.** Steps 2.1 (one-command start, HTTPS for the iPad, CI) and 2.2 (v1's report model, tests and migrations in `packages/core`). Done Nov 26.
+3. **The simplified build.** v1's screens served by v2 unchanged, v1's API on PostgreSQL, one password, and follow-up: items created at issue (F-1), the Follow-up page (F-2, F-4 to F-6), personal update links with a phone page (F-3), and the Excel export (F-7). One PR.
+   - Test: on a Mac with an iPad and an iPhone, make a report, issue it, open Follow-up, send a link, and mark an item Done from the phone.
+4. **Beta.** Cecil and the skilled nursing operator use it for real visits and follow-up.
+   - Test: real items at the operator's sites are updated from phones through personal links.
+
+Later, if needed: the next-visit check (A-17, F-8), F-9 (the client choosing PDF only or tenant access per assessment), the program coordinator view (F-10), a second client copy, licensing, and the rest of `docs/plan.md` "Later, if needed".
 
 ## Decisions log
 
@@ -159,6 +157,11 @@ Add a row after every meeting with Cecil; this table is the source of truth for 
 
 | Date | Decision |
 | --- | --- |
+| Nov 26, 2026 | Simplified build for the beta with a skilled nursing operator (45 sites): v1's screens served by v2 unchanged, v1's API on PostgreSQL, one password, and follow-up on action items. Everything else waits until a paying customer needs it |
+| Nov 26, 2026 | Action item statuses: Open, In progress, Done, Deferred, Withdrawn. Facility contacts set In progress and Done from their link; the Follow-up page sets any status but Withdrawn, which a revision sets. The next-visit check (Fixed / Not fixed / Worse) is for later |
+| Nov 26, 2026 | Tenants update through personal links with no sign-in: one link per named person and property, copied and sent by hand, turned off at any time. The app sends no email |
+| Nov 26, 2026 | Facility, assigned person, due date and status are entered on the Follow-up page on the client's behalf; each change records who and when |
+| Nov 26, 2026 | The Follow-up page and the phone page follow the prototype in `docs/prototype/` |
 | Nov 25, 2026 | Drafting uses Cecil's own Anthropic account in his copy and the client's own account in a client copy; Cecil's key in a client copy only with the client's written OK. Until Cecil's copy goes live, real drafting tests on Michael's Mac use Michael's own API key |
 | Nov 25, 2026 | Plan approved (`docs/plan.md`); details and reasons in `docs/decisions.md` |
 | Nov 25, 2026 | Hosting: build once, install anywhere. One package keeps each organization's data separate; a client gets its own organization in Cecil's copy or the same package on its own server. Hosting details to confirm with Cecil's IT contact before Milestone 4 |
@@ -191,15 +194,15 @@ Add a row after every meeting with Cecil; this table is the source of truth for 
 
 ## Open questions
 
-- [x] One copy per client on their own server, or one shared site? Decided Nov 25: build once, install anywhere. Confirm hosting details with Cecil's IT contact before Milestone 4.
-- [ ] In a client's own copy, does Cecil work inside it as an assessor user? Provisional yes; confirm with Cecil's IT contact before Milestone 4.
-- [ ] Where does Cecil's real copy run (Cecil's computer, a managed host or a small cloud server)? Choose before he uses v2 for real.
-- [x] How do tenants get in: their own logins, or secure links with no password? Decided Nov 25: personal secure links, no password.
-- [ ] What are the action item statuses, and who can mark an item done? Provisional: Open, Assigned, In progress, Done, Deferred (see Decisions log). Confirm with Cecil.
+- [x] One copy per client on their own server, or one shared site? Decided Nov 25: build once, install anywhere. Nov 26: for the beta, one copy; client copies are later, if needed.
+- [ ] In a client's own copy, does Cecil work inside it as an assessor user? Provisional yes. Not needed for the beta (one copy); ask when a client wants its own copy.
+- [ ] Where does Cecil's real copy run (Cecil's computer, a managed host or a small cloud server)? Choose before the beta uses it for real: phones need to reach it from the operator's sites.
+- [x] How do tenants get in: their own logins, or secure links with no password? Decided Nov 25: personal secure links, no password. Nov 26: the link itself is the access (no sign-in), one per named person and property, turned off at any time.
+- [x] What are the action item statuses, and who can mark an item done? Decided Nov 26: Open, In progress, Done, Deferred, Withdrawn; the facility contact or the client marks Done (see Decisions log). The next-visit check is for later.
 - [x] What does "issued" mean now: a locked report with live items (proposed), or something else? Decided Nov 25: as proposed.
 - [x] Email reminders for overdue items, or on-screen flags only? Decided Nov 25: on-screen flags; an opt-in weekly digest later.
 - [x] Whose Claude account does drafting use in each client's copy? Decided Nov 25: Cecil's own Anthropic account for his copy; the client's own account (Anthropic, or their Bedrock, Vertex or Foundry) in a client copy; Cecil's key in a client copy only with the client's written OK.
 - [ ] Should a section's rating stay the average of its subsections, or take the worst one? Provisional: the average. Confirm with Cecil.
 - [x] Add Immediate / Short-term / Long-term as a third priority scheme? Decided Nov 25: not for now.
 - [ ] Who owns Cecil's questionnaires and phrases if the app is sold to others, and on what terms? Provisional: they belong to Cecil's firm, as a licensed pack. Terms go to a lawyer.
-- [ ] What does the program coordinator need? Ask at the meeting next week. Deferred until after Milestone 3.
+- [ ] What does the program coordinator need? Ask at the meeting next week. Later, if needed.

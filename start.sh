@@ -14,12 +14,26 @@ if ! docker info >/dev/null 2>&1; then
   exit 1
 fi
 
-# Settings for this computer: created once, with a new database password.
+random() { LC_ALL=C tr -dc "$1" </dev/urandom 2>/dev/null | head -c "$2" || true; }
+
+# Settings for this computer: created once, with new passwords and secrets.
 if [ ! -f .env ]; then
-  password=$(openssl rand -hex 24 2>/dev/null || LC_ALL=C tr -dc 'a-f0-9' </dev/urandom | head -c 48)
-  sed "s/^POSTGRES_PASSWORD=.*/POSTGRES_PASSWORD=${password}/" .env.example > .env
+  cp .env.example .env
   echo "Created .env with this computer's settings."
 fi
+# Fill in anything missing (an .env from an earlier version may not have them).
+fill() {
+  local key=$1 value=$2
+  if grep -q "^${key}=." .env; then return; fi
+  if grep -q "^${key}=" .env; then
+    sed "s|^${key}=.*|${key}=${value}|" .env > .env.tmp && mv .env.tmp .env
+  else
+    printf '%s=%s\n' "$key" "$value" >> .env
+  fi
+}
+fill POSTGRES_PASSWORD "$(random 'a-f0-9' 48)"
+fill APP_PASSWORD "$(random 'a-km-zA-HJ-NP-Z2-9' 12)"
+fill SESSION_SECRET "$(random 'a-f0-9' 64)"
 set -a
 # shellcheck disable=SC1091
 . ./.env
@@ -52,6 +66,8 @@ export SITE_ADDRESSES="$sites"
 export PRIMARY_URL="https://${device_host}:${HTTPS_PORT}"
 # A device that opens the app by IP address sends no server name, so Caddy needs a default.
 export DEFAULT_SNI="${lan_ip:-localhost}"
+# Personal update links point phones at this computer's HTTPS address.
+export PUBLIC_URL="${PRIMARY_URL}"
 
 echo "Starting Cecil's Report Builder (the first time takes a few minutes)…"
 docker compose up -d --build --wait
@@ -66,11 +82,13 @@ fi
 
 cat <<EOF
 
-Cecil's Report Builder is running, with test data.
+Cecil's Report Builder is running.
 
   On this computer:         http://localhost:${APP_PORT}
   On an iPad or iPhone:     ${PRIMARY_URL}
     (same Wi-Fi; the first time on each device, open http://${device_host}:${SETUP_PORT} and follow the steps)
+  Password:                 ${APP_PASSWORD}   (in .env as APP_PASSWORD)
+  Follow-up:                http://localhost:${APP_PORT}/follow-up
 
 Stop it with ./stop.sh. Your test data is kept for next time.
 EOF

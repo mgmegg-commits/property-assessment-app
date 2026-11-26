@@ -25,6 +25,10 @@ COPY --from=build --chown=node:node /src/apps/server/package.json apps/server/
 COPY --from=build --chown=node:node /src/apps/server/dist apps/server/dist
 COPY --from=build --chown=node:node /src/apps/server/migrations apps/server/migrations
 COPY --from=build --chown=node:node /src/apps/web/dist apps/web/dist
+# v1's front end, built from the pinned commit in apps/v1-web/VERSION.json.
+COPY --chown=node:node apps/v1-web apps/v1-web
+# Photos live here (a volume in compose.yaml); the app runs as "node" and owns it.
+RUN mkdir -p /data && chown node:node /data
 USER node
 EXPOSE 3000
 HEALTHCHECK --interval=5s --timeout=3s --start-period=30s --retries=5 \
